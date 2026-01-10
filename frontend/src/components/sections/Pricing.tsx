@@ -210,7 +210,7 @@ export default function Pricing() {
                                         display: 'flex',
                                         alignItems: 'start',
                                         fontSize: '14px',
-                                        color: '#374151',
+                                        color: '#1a1a1a',
                                         marginBottom: '12px',
                                         lineHeight: 1.5
                                     }}>
