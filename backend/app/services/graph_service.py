@@ -48,4 +48,73 @@ class GraphService:
             logger.error(f"Failed to save edges: {e}")
             raise e
 
+    async def get_layer_data(self, project_id: str, layer_id: str):
+        """
+        Retrieves graph data specifically tailored for the requested visualization layer.
+        Currently returns MOCK data for demonstration of the 7-layer system.
+        """
+        # Mock Data Generation based on Layer
+        if layer_id == 'layer-0': # Executive Overview
+            return {
+                "type": "mermaid",
+                "definition": """
+                graph TD
+                    Client(Client Apps) --> Gateway[API Gateway]
+                    Gateway --> Auth[Auth Service]
+                    Gateway --> Core[Core API]
+                    Core --> DB[(Primary DB)]
+                    Auth --> DB
+                """
+            }
+        
+        elif layer_id == 'layer-1': # Service Map
+            return {
+                "type": "reactflow",
+                "nodes": [
+                    {"id": "gateway", "type": "default", "data": {"label": "API Gateway"}, "position": {"x": 250, "y": 50}},
+                    {"id": "auth", "type": "default", "data": {"label": "Auth Service"}, "position": {"x": 100, "y": 200}},
+                    {"id": "core", "type": "default", "data": {"label": "Core Service"}, "position": {"x": 400, "y": 200}},
+                    {"id": "db", "type": "output", "data": {"label": "PostgreSQL"}, "position": {"x": 250, "y": 350}},
+                ],
+                "edges": [
+                    {"id": "e1", "source": "gateway", "target": "auth", "animated": True, "label": "HTTP"},
+                    {"id": "e2", "source": "gateway", "target": "core", "animated": True, "label": "HTTP"},
+                    {"id": "e3", "source": "auth", "target": "db", "label": "SQL"},
+                    {"id": "e4", "source": "core", "target": "db", "label": "SQL"},
+                ]
+            }
+
+        elif layer_id == 'layer-2': # API Mapping
+            return {
+                "type": "json",
+                "data": [
+                    {"method": "POST", "path": "/api/v1/auth/login", "service": "Auth Service", "status": "active"},
+                    {"method": "GET", "path": "/api/v1/users/me", "service": "Auth Service", "status": "active"},
+                    {"method": "POST", "path": "/api/v1/orders", "service": "Core Service", "status": "active"},
+                    {"method": "DELETE", "path": "/api/v1/orders/{id}", "service": "Core Service", "status": "deprecated"},
+                ]
+            }
+            
+        elif layer_id == 'layer-7': # Security Flow
+            return {
+                "type": "mermaid",
+                "definition": """
+                sequenceDiagram
+                    participant User
+                    participant FE as Frontend
+                    participant GW as API Gateway
+                    participant Auth as Auth Service
+                    
+                    User->>FE: Click Login
+                    FE->>GW: POST /login
+                    GW->>Auth: Forward Credentials
+                    Auth-->>GW: Return JWT
+                    GW-->>FE: Return JWT
+                    FE->>GW: Request + Bearer Token
+                    GW->>GW: Validate Token
+                """
+            }
+
+        return {"type": "empty", "message": "Layer not implemented yet"}
+
 graph_service = GraphService()

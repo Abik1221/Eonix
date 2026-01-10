@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Logo from '@/components/Logo';
 
 const links = {
-    Product: ['Features', 'Pricing', 'Changelog', 'Roadmap'],
+    Product: ['Pricing', 'Changelog', 'Roadmap'],
     Resources: ['Docs', 'API', 'Blog', 'Community'],
     Company: ['About', 'Careers', 'Contact', 'Privacy'],
 };

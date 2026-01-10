@@ -1,8 +1,33 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Logo from '@/components/Logo';
 
 export default function LoginPage() {
+    const router = useRouter();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleLogin = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Allow mock login
+        setIsLoading(true);
+        setTimeout(() => {
+            router.push('/workspaces');
+        }, 1000);
+    };
+
+    const handleOAuth = (provider: string) => {
+        // Simulate OAuth
+        setIsLoading(true);
+        console.log(`Logging in with ${provider}`);
+        setTimeout(() => {
+            router.push('/workspaces');
+        }, 1000);
+    };
+
     return (
         <div style={{
             minHeight: '100vh',
@@ -48,42 +73,48 @@ export default function LoginPage() {
 
                     {/* OAuth Buttons */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
-                        <button style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '12px',
-                            padding: '12px 16px',
-                            backgroundColor: '#ffffff',
-                            border: '1px solid #e0e0e0',
-                            borderRadius: '8px',
-                            fontSize: '14px',
-                            fontWeight: 500,
-                            color: '#1a1a1a',
-                            cursor: 'pointer',
-                            transition: 'border-color 0.2s ease'
-                        }}>
+                        <button
+                            type="button"
+                            onClick={() => handleOAuth('GitHub')}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '12px',
+                                padding: '12px 16px',
+                                backgroundColor: '#ffffff',
+                                border: '1px solid #e0e0e0',
+                                borderRadius: '8px',
+                                fontSize: '14px',
+                                fontWeight: 500,
+                                color: '#1a1a1a',
+                                cursor: 'pointer',
+                                transition: 'border-color 0.2s ease'
+                            }}>
                             <svg width="20" height="20" viewBox="0 0 24 24">
                                 <path fill="#1a1a1a" d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
                             </svg>
                             Continue with GitHub
                         </button>
 
-                        <button style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '12px',
-                            padding: '12px 16px',
-                            backgroundColor: '#ffffff',
-                            border: '1px solid #e0e0e0',
-                            borderRadius: '8px',
-                            fontSize: '14px',
-                            fontWeight: 500,
-                            color: '#1a1a1a',
-                            cursor: 'pointer',
-                            transition: 'border-color 0.2s ease'
-                        }}>
+                        <button
+                            type="button"
+                            onClick={() => handleOAuth('Google')}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '12px',
+                                padding: '12px 16px',
+                                backgroundColor: '#ffffff',
+                                border: '1px solid #e0e0e0',
+                                borderRadius: '8px',
+                                fontSize: '14px',
+                                fontWeight: 500,
+                                color: '#1a1a1a',
+                                cursor: 'pointer',
+                                transition: 'border-color 0.2s ease'
+                            }}>
                             <svg width="20" height="20" viewBox="0 0 24 24">
                                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
@@ -107,7 +138,7 @@ export default function LoginPage() {
                     </div>
 
                     {/* Email Form */}
-                    <form>
+                    <form onSubmit={handleLogin}>
                         <div style={{ marginBottom: '16px' }}>
                             <label style={{
                                 display: 'block',
@@ -120,6 +151,8 @@ export default function LoginPage() {
                             </label>
                             <input
                                 type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 placeholder="you@example.com"
                                 style={{
                                     width: '100%',
@@ -149,6 +182,8 @@ export default function LoginPage() {
                             </div>
                             <input
                                 type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 placeholder="••••••••"
                                 style={{
                                     width: '100%',
@@ -174,10 +209,12 @@ export default function LoginPage() {
                                 fontSize: '14px',
                                 fontWeight: 500,
                                 cursor: 'pointer',
-                                transition: 'opacity 0.2s ease'
+                                transition: 'opacity 0.2s ease',
+                                opacity: isLoading ? 0.7 : 1
                             }}
+                            disabled={isLoading}
                         >
-                            Sign in
+                            {isLoading ? 'Signing in...' : 'Sign in'}
                         </button>
                     </form>
                 </div>

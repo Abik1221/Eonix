@@ -1,10 +1,21 @@
 import React from 'react';
 
 const steps = [
-    { number: '01', title: 'Connect', description: 'Link your GitHub, GitLab, or Bitbucket repositories via OAuth.' },
-    { number: '02', title: 'Extract', description: 'Our parsers analyze your code to extract services, endpoints, and databases.' },
-    { number: '03', title: 'Visualize', description: 'Interactive diagrams render your architecture with semantic zoom.' },
-    { number: '04', title: 'Insights', description: 'AI explains violations and suggests improvements based on your code.' },
+    {
+        number: '01',
+        title: 'We Extract (No Guessing)',
+        description: 'Your code is parsed using compilers and ASTs to build a verified architecture graph.'
+    },
+    {
+        number: '02',
+        title: 'We Visualize (Pure Data)',
+        description: 'Services, APIs, databases, events, and dependencies are rendered as interactive diagrams.'
+    },
+    {
+        number: '03',
+        title: 'AI Explains (Zero Hallucinations)',
+        description: 'AI summarizes flows, explains risks, and answers architectural questions — without inventing anything.'
+    },
 ];
 
 export default function HowItWorks() {
@@ -27,7 +38,7 @@ export default function HowItWorks() {
                         fontWeight: 700,
                         color: '#1a1a1a'
                     }}>
-                        Four simple steps
+                        Three simple steps
                     </h2>
                 </div>
 

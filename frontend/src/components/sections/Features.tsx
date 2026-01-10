@@ -2,95 +2,148 @@ import React from 'react';
 
 const features = [
     {
-        title: 'Static Analysis',
-        description: 'Uses compilers and parsers to extract accurate facts. Supports Python, TypeScript, Java, and Go.',
+        title: 'Explain Endpoints',
+        question: 'What does this service do?',
+        value: 'AI generates a context-aware summary of the service’s role and dependencies.',
+        icon: '🔍',
+        color: 'bg-blue-50 text-blue-600'
     },
     {
-        title: 'Architecture Graph',
-        description: 'Neo4j-powered graph database representing your architecture with Services, Endpoints, and Databases.',
+        title: 'Assess Risks',
+        question: 'Why is this shared DB dangerous?',
+        value: 'AI highlights coupling, points of failure, and violation of 12-factor principles.',
+        icon: '⚠️',
+        color: 'bg-orange-50 text-orange-600'
     },
     {
-        title: 'AI Insights',
-        description: 'LangGraph pipeline that explains violations and suggests improvements based on your actual code.',
+        title: 'System Summary',
+        question: 'Summarize this ecosystem.',
+        value: 'Instant high-level overview of microservices, events, and data flow.',
+        icon: '🧠',
+        color: 'bg-purple-50 text-purple-600'
     },
     {
-        title: 'Visualization',
-        description: 'Interactive diagrams with semantic zoom. Filter by type, team, or violations.',
-    },
-    {
-        title: 'Collaboration',
-        description: 'Workspaces, projects, and roles. Comment threads on nodes with real-time sync.',
-    },
-    {
-        title: 'CI/CD Integration',
-        description: 'GitHub Actions for incremental parsing. Content hashing to cache unchanged files.',
+        title: 'Grounded QA',
+        question: 'What breaks if I change this?',
+        value: 'Answers referenced directly from your verified architecture graph.',
+        icon: '💬',
+        color: 'bg-green-50 text-green-600'
     },
 ];
 
 export default function Features() {
     return (
-        <section id="features" style={{ backgroundColor: '#ffffff', padding: '80px 0' }}>
-            <div className="container">
+        <section id="features" style={{ backgroundColor: '#ffffff', padding: '120px 0' }}>
+            <div className="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
+
                 {/* Header */}
-                <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-                    <p style={{
-                        fontSize: '13px',
-                        color: '#888888',
-                        textTransform: 'uppercase',
-                        letterSpacing: '1px',
-                        marginBottom: '12px'
-                    }}>
-                        Features
-                    </p>
+                <div style={{ textAlign: 'center', marginBottom: '80px' }}>
                     <h2 style={{
-                        fontSize: 'clamp(28px, 5vw, 36px)',
-                        fontWeight: 700,
+                        fontSize: 'clamp(32px, 5vw, 48px)',
+                        fontWeight: 800,
                         color: '#1a1a1a',
-                        marginBottom: '12px'
+                        marginBottom: '24px',
+                        letterSpacing: '-0.02em',
+                        lineHeight: 1.1
                     }}>
-                        Everything you need
+                        AI That Understands Your Architecture
+                        <br />
+                        <span style={{ color: '#6366f1' }}>Not Just Your Code</span>
                     </h2>
                     <p style={{
-                        fontSize: 'clamp(14px, 3vw, 16px)',
-                        color: '#666666',
-                        maxWidth: '480px',
-                        margin: '0 auto'
+                        fontSize: '18px',
+                        color: '#4b5563',
+                        maxWidth: '600px',
+                        margin: '0 auto',
+                        lineHeight: 1.6
                     }}>
-                        Complete toolkit for mapping, visualizing, and governing your software architecture.
+                        Get instant, architecturally-aware answers without hallucination risk.
                     </p>
                 </div>
 
-                {/* Grid - Responsive */}
+                {/* Grid */}
                 <div style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                    gap: '24px'
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                    gap: '40px',
+                    alignItems: 'stretch'
                 }}>
                     {features.map((feature, index) => (
                         <div
                             key={index}
                             style={{
-                                padding: '28px',
-                                border: '1px solid #eaeaea',
-                                borderRadius: '12px',
-                                transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
+                                padding: '32px',
+                                backgroundColor: '#ffffff',
+                                border: '1px solid #f1f5f9',
+                                borderRadius: '24px',
+                                boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.05)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                                height: '100%'
                             }}
+                            className="group hover:translate-y-[-4px] hover:shadow-xl hover:border-indigo-100"
                         >
-                            <h3 style={{
-                                fontSize: '17px',
-                                fontWeight: 600,
-                                color: '#1a1a1a',
-                                marginBottom: '10px'
+                            {/* Header */}
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '16px',
+                                marginBottom: '24px'
                             }}>
-                                {feature.title}
-                            </h3>
-                            <p style={{
-                                fontSize: '14px',
-                                color: '#666666',
-                                lineHeight: 1.6
-                            }}>
-                                {feature.description}
-                            </p>
+                                <div style={{
+                                    width: '48px',
+                                    height: '48px',
+                                    borderRadius: '12px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '24px',
+                                    backgroundColor: '#f8fafc'
+                                }}>
+                                    {feature.icon}
+                                </div>
+                                <h3 style={{
+                                    fontSize: '20px',
+                                    fontWeight: 700,
+                                    color: '#0f172a'
+                                }}>
+                                    {feature.title}
+                                </h3>
+                            </div>
+
+                            {/* Chat interaction simulation */}
+                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                {/* User Question styling */}
+                                <div style={{
+                                    alignSelf: 'flex-end',
+                                    backgroundColor: '#f1f5f9',
+                                    color: '#475569',
+                                    padding: '12px 18px',
+                                    borderRadius: '16px 16px 0 16px',
+                                    fontSize: '14px',
+                                    fontWeight: 500,
+                                    maxWidth: '90%',
+                                    position: 'relative'
+                                }}>
+                                    "{feature.question}"
+                                </div>
+
+                                {/* AI Answer styling */}
+                                <div style={{
+                                    alignSelf: 'flex-start',
+                                    background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+                                    color: '#ffffff',
+                                    padding: '16px 20px',
+                                    borderRadius: '16px 16px 16px 0',
+                                    fontSize: '15px',
+                                    lineHeight: 1.5,
+                                    fontWeight: 500,
+                                    boxShadow: '0 4px 12px rgba(79, 70, 229, 0.15)'
+                                }}>
+                                    {feature.value}
+                                </div>
+                            </div>
                         </div>
                     ))}
                 </div>

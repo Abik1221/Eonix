@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { AIChatSVG } from '../../../components/visuals/AIChatSVG';
 
 export const metadata = {
     title: 'Getting Started - Eonix Docs',
@@ -16,6 +17,10 @@ export default function GettingStartedPage() {
                 Follow this guide to connect your first repository and generate your architectural map.
             </p>
 
+
+            <div style={{ marginBottom: '56px' }}>
+                <AIChatSVG />
+            </div>
             <div style={{ marginBottom: '48px' }}>
                 <h2 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '16px', color: '#1a1a1a' }}>
                     1. Create an Account
@@ -35,7 +40,7 @@ export default function GettingStartedPage() {
                     2. Connect a Repository
                 </h2>
                 <p style={{ fontSize: '16px', lineHeight: 1.7, color: '#444444', marginBottom: '16px' }}>
-                    Once logged in, navigate to your Dashboard. You will see an option to "Add Repository".
+                    Once logged in, navigate to your Dashboard. You will see an option to &quot;Add Repository&quot;.
                 </p>
                 <ol style={{ paddingLeft: '24px', color: '#444444', lineHeight: 1.8 }}>
                     <li style={{ marginBottom: '8px' }}>Click the <strong>Add Repository</strong> button.</li>
@@ -59,7 +64,7 @@ export default function GettingStartedPage() {
 
             <div style={{ marginTop: '60px', paddingTop: '32px', borderTop: '1px solid #eaeaea' }}>
                 <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '12px', color: '#1a1a1a' }}>
-                    What's Next?
+                    What&apos;s Next?
                 </h3>
                 <Link
                     href="/docs/features"
@@ -68,6 +73,6 @@ export default function GettingStartedPage() {
                     Explore Core Features &rarr;
                 </Link>
             </div>
-        </div>
+        </div >
     );
 }

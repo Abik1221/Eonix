@@ -32,6 +32,8 @@ export default function Hero() {
                         Map Your Architecture.
                         <br />
                         <span style={{ color: '#404040' }}>Understand Your Code.</span>
+                        <br />
+                        <span style={{ color: '#404040' }}>Let AI Explain the Why.</span>
                     </h1>
 
                     {/* Subheadline */}
@@ -40,12 +42,12 @@ export default function Hero() {
                         color: '#333333',
                         lineHeight: 1.7,
                         marginBottom: '36px',
-                        maxWidth: '540px',
+                        maxWidth: '640px',
                         marginLeft: 'auto',
                         marginRight: 'auto'
                     }}>
-                        Transform your code into living architectural maps. Gain visibility and
-                        control over your software ecosystem with semantic analysis.
+                        Turn complex codebases into living architectural maps.
+                        We extract structure with deterministic analysis — and use AI to explain risks, flows, and decisions in plain English.
                     </p>
 
                     {/* CTA Buttons - Responsive */}
