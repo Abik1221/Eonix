@@ -14,7 +14,7 @@ export default function MermaidDiagram({ definition }: MermaidDiagramProps) {
         if (ref.current) {
             mermaid.initialize({
                 startOnLoad: true,
-                theme: 'neutral',
+                theme: 'dark', // Changed to dark theme
                 securityLevel: 'loose',
             });
 
@@ -38,7 +38,7 @@ export default function MermaidDiagram({ definition }: MermaidDiagramProps) {
 
     return (
         <div
-            className="w-full h-full flex items-center justify-center bg-white rounded-lg shadow-sm border border-gray-100 overflow-auto p-4"
+            className="w-full h-full flex items-center justify-center bg-transparent overflow-auto p-4"
         >
             <div ref={ref} className="mermaid w-full flex justify-center" />
         </div>

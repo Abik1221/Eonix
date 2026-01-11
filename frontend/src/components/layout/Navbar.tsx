@@ -37,7 +37,7 @@ export default function Navbar() {
             top: 0,
             left: 0,
             right: 0,
-            zIndex: 50,
+            zIndex: 100,
             backgroundColor: scrolled ? '#ffffff' : 'transparent',
             borderBottom: scrolled ? '1px solid #eaeaea' : '1px solid transparent',
             transition: 'background-color 0.3s ease, border-color 0.3s ease'

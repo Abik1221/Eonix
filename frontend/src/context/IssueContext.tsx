@@ -11,6 +11,8 @@ export interface Comment {
     author: string;
     content: string;
     timestamp: string;
+    replies?: Comment[];
+    mentions?: string[];
 }
 
 export interface Issue {
@@ -33,7 +35,8 @@ interface IssueContextType {
     activeEntity: { id: string; name: string } | null;
     createIssue: (issue: Omit<Issue, 'id' | 'createdAt' | 'comments' | 'status'>) => void;
     updateIssueStatus: (issueId: string, status: IssueStatus) => void;
-    addComment: (issueId: string, content: string) => void;
+    addComment: (issueId: string, content: string, parentCommentId?: string) => void;
+    resolveComment: (issueId: string, commentId: string) => void; // Placeholder for future use
     openCreateModal: (entityId: string, entityName: string) => void;
     closeCreateModal: () => void;
     getIssuesForEntity: (entityId: string) => Issue[];
@@ -55,7 +58,15 @@ const INITIAL_ISSUES: Issue[] = [
         assignedTo: 'Team Backend',
         createdAt: new Date().toISOString(),
         comments: [
-            { id: 'c1', author: 'AI Analyst', content: 'This violation increases blast radius by 40%.', timestamp: new Date().toISOString() }
+            {
+                id: 'c1',
+                author: 'AI Analyst',
+                content: 'This violation increases blast radius by 40%. Recommended action: Split DB schemas.',
+                timestamp: new Date().toISOString(),
+                replies: [
+                    { id: 'c1-r1', author: 'Sarah Chen', content: '@AI Analyst We are planning this for Q3.', timestamp: new Date().toISOString() }
+                ]
+            }
         ]
     },
     {
@@ -94,18 +105,42 @@ export function IssueProvider({ children }: { children: ReactNode }) {
         setIssues((prev) => prev.map(i => i.id === issueId ? { ...i, status } : i));
     };
 
-    const addComment = (issueId: string, content: string) => {
+    const addComment = (issueId: string, content: string, parentCommentId?: string) => {
         const newComment: Comment = {
             id: `c-${Date.now()}`,
             author: 'You', // Mock User
             content,
             timestamp: new Date().toISOString(),
+            replies: []
         };
-        setIssues((prev) => prev.map(i =>
-            i.id === issueId
-                ? { ...i, comments: [...i.comments, newComment] }
-                : i
-        ));
+
+        setIssues((prev) => prev.map(i => {
+            if (i.id !== issueId) return i;
+
+            if (parentCommentId) {
+                // Add reply to specific comment
+                const addReplyToComments = (comments: Comment[]): Comment[] => {
+                    return comments.map(c => {
+                        if (c.id === parentCommentId) {
+                            return { ...c, replies: [...(c.replies || []), newComment] };
+                        }
+                        if (c.replies && c.replies.length > 0) {
+                            return { ...c, replies: addReplyToComments(c.replies) };
+                        }
+                        return c;
+                    });
+                };
+                return { ...i, comments: addReplyToComments(i.comments) };
+            } else {
+                // Add top-level comment
+                return { ...i, comments: [...i.comments, newComment] };
+            }
+        }));
+    };
+
+    const resolveComment = (issueId: string, commentId: string) => {
+        // Implementation for resolving comments (visual indicator mainly)
+        console.log(`Resolving comment ${commentId} in issue ${issueId}`);
     };
 
     const openCreateModal = (entityId: string, entityName: string) => {
@@ -130,6 +165,7 @@ export function IssueProvider({ children }: { children: ReactNode }) {
             createIssue,
             updateIssueStatus,
             addComment,
+            resolveComment,
             openCreateModal,
             closeCreateModal,
             getIssuesForEntity
