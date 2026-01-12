@@ -15,19 +15,17 @@ export default function AnalysisPage() {
 
     // Scanning State
     const [scanProgress, setScanProgress] = useState(0);
-    const [scanStatus, setScanStatus] = useState('Initializing environment...');
-    const [logs, setLogs] = useState<string[]>([]);
+    const [scanStatus, setScanStatus] = useState('Initializing...');
 
     // Scan Simulation
     useEffect(() => {
         if (step === 'scanning') {
             const steps = [
-                { time: 500, prog: 10, msg: 'Cloning repositories...', log: '> git clone https://github.com/user/repo.git' },
-                { time: 1500, prog: 25, msg: 'Analyzing file structure...', log: '> Found 45 detected files in /src' },
-                { time: 2500, prog: 40, msg: 'Detecting languages & frameworks...', log: '> Detected Python (FastAPI), TypeScript (Next.js)' },
-                { time: 3500, prog: 60, msg: 'Mapping service dependencies...', log: '> Found Docker Compose topology' },
-                { time: 4500, prog: 80, msg: 'Identifying database connections...', log: '> Detected PostgreSQL connection string' },
-                { time: 5500, prog: 100, msg: 'Analysis complete', log: '> Generating architecture graph...' },
+                { time: 500, prog: 10, msg: 'Connecting to repository...' },
+                { time: 1500, prog: 30, msg: 'Analyzing codebase structure...' },
+                { time: 3000, prog: 55, msg: 'Identifying architectural patterns...' },
+                { time: 4500, prog: 80, msg: 'Generating explaining models...' },
+                { time: 6000, prog: 100, msg: 'Finalizing analysis...' },
             ];
 
             let currentStep = 0;
@@ -42,7 +40,6 @@ export default function AnalysisPage() {
                 const s = steps[currentStep];
                 setScanProgress(s.prog);
                 setScanStatus(s.msg);
-                setLogs(prev => [...prev, s.log]);
                 currentStep++;
             }, 1000);
 
@@ -71,51 +68,65 @@ export default function AnalysisPage() {
 
                 {step === 'scanning' ? (
                     <div style={{ textAlign: 'center' }}>
-                        <h2 style={{ fontSize: '24px', fontWeight: 600, color: '#1a1a1a', marginBottom: '16px' }}>
+                        {/* Newton's Cradle Animation */}
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '120px',
+                            marginBottom: '32px',
+                            gap: '2px'
+                        }}>
+                            <div className="cradle-ball first"></div>
+                            <div className="cradle-ball"></div>
+                            <div className="cradle-ball"></div>
+                            <div className="cradle-ball"></div>
+                            <div className="cradle-ball last"></div>
+                        </div>
+
+                        <h2 style={{ fontSize: '18px', fontWeight: 500, color: '#444', marginBottom: '8px' }}>
                             {scanStatus}
                         </h2>
 
-                        {/* Progress Bar */}
-                        <div style={{
-                            width: '100%',
-                            height: '6px',
-                            backgroundColor: '#eaeaea',
-                            borderRadius: '3px',
-                            marginBottom: '32px',
-                            overflow: 'hidden',
-                            position: 'relative'
-                        }}>
-                            <div style={{
-                                width: `${scanProgress}%`,
-                                height: '100%',
-                                backgroundColor: '#1a1a1a',
-                                transition: 'width 0.5s ease-out',
-                                borderRadius: '3px'
-                            }} />
-                        </div>
+                        <p style={{ fontSize: '14px', color: '#888', marginBottom: '24px' }}>
+                            {Math.round(scanProgress)}% complete
+                        </p>
 
-                        {/* Terminal Output */}
-                        <div style={{
-                            textAlign: 'left',
-                            backgroundColor: '#1a1a1a',
-                            borderRadius: '12px',
-                            padding: '24px',
-                            fontFamily: 'monospace',
-                            fontSize: '13px',
-                            color: '#00ff41',
-                            height: '240px',
-                            overflowY: 'auto',
-                            boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
-                        }}>
-                            {logs.map((log, i) => (
-                                <div key={i} style={{ marginBottom: '8px', opacity: 0.9 }}>{log}</div>
-                            ))}
-                            <div style={{ animation: 'blink 1s infinite' }}>_</div>
-                        </div>
                         <style jsx>{`
-                            @keyframes blink {
-                                0%, 100% { opacity: 1; }
-                                50% { opacity: 0; }
+                            .cradle-ball {
+                                width: 24px;
+                                height: 24px;
+                                background-color: #1a1a1a;
+                                border-radius: 50%;
+                                position: relative;
+                                transform-origin: 50% -60px;
+                            }
+                            .cradle-ball::before {
+                                content: '';
+                                position: absolute;
+                                top: -60px;
+                                left: 11px;
+                                width: 2px;
+                                height: 60px;
+                                background-color: #e0e0e0;
+                            }
+                            .first {
+                                animation: swing-left 1.2s infinite linear;
+                            }
+                            .last {
+                                animation: swing-right 1.2s infinite linear;
+                            }
+                            @keyframes swing-left {
+                                0% { transform: rotate(0deg); }
+                                25% { transform: rotate(25deg); }
+                                50% { transform: rotate(0deg); }
+                                100% { transform: rotate(0deg); }
+                            }
+                            @keyframes swing-right {
+                                0% { transform: rotate(0deg); }
+                                50% { transform: rotate(0deg); }
+                                75% { transform: rotate(-25deg); }
+                                100% { transform: rotate(0deg); }
                             }
                         `}</style>
                     </div>
@@ -304,7 +315,8 @@ export default function AnalysisPage() {
                             </button>
                         </div>
                     </div>
-                )}
+                )
+                }
             </div>
 
             <UpgradeModal

@@ -37,10 +37,7 @@ export default function ServiceMap({ initialNodes, initialEdges }: ServiceMapPro
     );
 
     return (
-        <div className="w-full h-full bg-slate-50 rounded-lg border border-gray-200 overflow-hidden relative">
-            <div className="absolute top-4 left-4 z-10 bg-white/80 backdrop-blur px-3 py-1.5 rounded-md shadow-sm border border-gray-200 text-xs text-gray-500 pointer-events-none">
-                💡 Right-click any node to report an issue
-            </div>
+        <div className="w-full h-full bg-transparent overflow-hidden relative">
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
@@ -50,9 +47,13 @@ export default function ServiceMap({ initialNodes, initialEdges }: ServiceMapPro
                 onConnect={onConnect}
                 fitView
             >
-                <Controls />
-                <MiniMap />
-                <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+                <Controls className="bg-[#09090b] border-white/10 fill-zinc-400 [&>button]:border-white/5 [&>button:hover]:bg-zinc-800" />
+                <MiniMap
+                    style={{ backgroundColor: '#09090b', border: '1px solid rgba(255,255,255,0.05)' }}
+                    nodeColor={() => '#52525b'}
+                    maskColor="rgba(0,0,0,0.6)"
+                />
+                {/* <Background variant={BackgroundVariant.Dots} gap={16} size={1} color="#3f3f46" /> Used global grid instead */}
             </ReactFlow>
         </div>
     );

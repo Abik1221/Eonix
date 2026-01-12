@@ -24,10 +24,10 @@ export default function ImageGallery() {
                     alignItems: 'center'
                 }}>
                     {images.map((image, index) => (
-                        <div 
-                            key={index} 
-                            style={{ 
-                                display: 'flex', 
+                        <div
+                            key={index}
+                            style={{
+                                display: 'flex',
                                 flexDirection: 'row',
                                 alignItems: 'center',
                                 gap: '40px',
@@ -50,8 +50,8 @@ export default function ImageGallery() {
                                 border: '1px solid #f0f0f0',
                                 transition: 'transform 0.3s ease, box-shadow 0.3s ease'
                             }}>
-                                <img 
-                                    src={image.src} 
+                                <img
+                                    src={image.src}
                                     alt={image.alt}
                                     style={{
                                         width: '100%',

@@ -1,51 +1,129 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useIssues, Issue, IssuePriority } from '@/context/IssueContext';
+import { useIssues, Issue, IssuePriority, Comment } from '@/context/IssueContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+    X,
+    ArrowLeft,
+    Send,
+    MessageSquare,
+    CheckCircle,
+    AlertTriangle,
+    AlertCircle,
+    Info,
+    MoreHorizontal,
+    CornerDownRight,
+    User
+} from 'lucide-react';
 
 export default function IssueSidebar() {
     const { issues, addComment, updateIssueStatus } = useIssues();
     const [selectedIssueId, setSelectedIssueId] = useState<string | null>(null);
     const [commentText, setCommentText] = useState('');
+    const [replyToId, setReplyToId] = useState<string | null>(null);
 
     const selectedIssue = issues.find(i => i.id === selectedIssueId);
 
     const getPriorityColor = (p: IssuePriority) => {
         switch (p) {
-            case 'critical': return 'text-red-700 bg-red-50 ring-1 ring-red-600/10';
-            case 'high': return 'text-orange-700 bg-orange-50 ring-1 ring-orange-600/10';
-            case 'medium': return 'text-amber-700 bg-amber-50 ring-1 ring-amber-600/10';
-            default: return 'text-blue-700 bg-blue-50 ring-1 ring-blue-600/10';
+            case 'critical': return 'text-rose-400 bg-rose-500/10 border-rose-500/20';
+            case 'high': return 'text-orange-400 bg-orange-500/10 border-orange-500/20';
+            case 'medium': return 'text-amber-400 bg-amber-500/10 border-amber-500/20';
+            default: return 'text-blue-400 bg-blue-500/10 border-blue-500/20';
         }
     };
 
     const handleSendComment = (e: React.FormEvent) => {
         e.preventDefault();
         if (!selectedIssueId || !commentText.trim()) return;
-        addComment(selectedIssueId, commentText);
+
+        addComment(selectedIssueId, commentText, replyToId || undefined);
         setCommentText('');
+        setReplyToId(null);
     };
 
-    return (
-        <aside className="w-96 h-full bg-white border-l border-slate-200 flex flex-col shadow-xl shadow-slate-200/50 z-30 font-sans">
+    const StatusBadge = ({ status }: { status: string }) => {
+        const config = {
+            open: { color: 'text-zinc-400', bg: 'bg-zinc-500/10', text: 'Open' },
+            in_progress: { color: 'text-blue-400', bg: 'bg-blue-500/10', text: 'In Progress' },
+            done: { color: 'text-emerald-400', bg: 'bg-emerald-500/10', text: 'Resolved' },
+            blocked: { color: 'text-rose-400', bg: 'bg-rose-500/10', text: 'Blocked' },
+        }[status] || { color: 'text-zinc-400', bg: 'bg-zinc-500/10', text: status };
 
-            {/* Header */}
-            <div className="px-5 py-4 border-b border-slate-100 bg-white shrinking-0">
-                {selectedIssue ? (
-                    <button
-                        onClick={() => setSelectedIssueId(null)}
-                        className="text-xs font-semibold text-slate-500 hover:text-slate-900 flex items-center gap-1.5 transition-colors"
-                    >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                        Back
-                    </button>
-                ) : (
-                    <div className="flex justify-between items-start">
-                        <div>
-                            <h2 className="text-[15px] font-bold text-slate-900 leading-none mb-1">Detected Issues</h2>
-                            <p className="text-[11px] text-slate-500 font-medium">Architectural risks & improvements</p>
+        return (
+            <span className={`px-2 py-0.5 rounded text-[10px] font-medium border border-transparent ${config.color} ${config.bg}`}>
+                {config.text}
+            </span>
+        );
+    };
+
+    const CommentItem = ({ comment, isReply = false }: { comment: Comment, isReply?: boolean }) => (
+        <div className={`group ${isReply ? 'ml-8 mt-2' : 'mt-4'}`}>
+            <div className="flex gap-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/20 flex items-center justify-center text-indigo-400 shrink-0">
+                    <User className="w-4 h-4" />
+                </div>
+                <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium text-zinc-200">{comment.author}</span>
+                            <span className="text-[10px] text-zinc-500">
+                                {new Date(comment.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
                         </div>
-                        <span className="flex items-center justify-center min-w-[20px] h-5 px-1.5 text-[10px] font-bold text-blue-600 bg-blue-50 rounded-full">
+                    </div>
+
+                    <div className="text-sm text-zinc-300 leading-relaxed break-words bg-[#1a1a1e] p-3 rounded-2xl rounded-tl-sm border border-white/[0.04] group-hover:border-white/[0.08] transition-colors relative">
+                        {comment.content}
+                    </div>
+
+                    <div className="flex items-center gap-4 mt-1.5 ml-1">
+                        <button
+                            onClick={() => setReplyToId(comment.id)}
+                            className="flex items-center gap-1.5 text-[11px] font-medium text-zinc-500 hover:text-indigo-400 transition-colors"
+                        >
+                            <CornerDownRight className="w-3 h-3" />
+                            Reply
+                        </button>
+                    </div>
+
+                    {comment.replies && comment.replies.length > 0 && (
+                        <div>
+                            {comment.replies.map(reply => (
+                                <CommentItem key={reply.id} comment={reply} isReply={true} />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+
+    return (
+        <aside className="w-full h-full bg-[#0a0a0c] flex flex-col font-sans border-l border-white/[0.04]">
+            {/* Header */}
+            <div className="h-14 shrink-0 flex items-center px-4 bg-[#0a0a0c]/80 backdrop-blur-md border-b border-white/[0.04] z-10 sticky top-0">
+                {selectedIssue ? (
+                    <div className="flex items-center gap-3 w-full">
+                        <button
+                            onClick={() => setSelectedIssueId(null)}
+                            className="p-1.5 -ml-1.5 text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                        >
+                            <ArrowLeft className="w-4 h-4" />
+                        </button>
+                        <div className="flex-1 min-w-0">
+                            <h2 className="text-sm font-medium text-white truncate">{selectedIssue.title}</h2>
+                        </div>
+                        <StatusBadge status={selectedIssue.status} />
+                    </div>
+                ) : (
+                    <div className="flex justify-between items-center w-full">
+                        <h2 className="text-sm font-semibold text-zinc-100 flex items-center gap-2">
+                            <AlertCircle className="w-4 h-4 text-indigo-400" />
+                            Detected Issues
+                        </h2>
+                        <span className="flex items-center justify-center min-w-[20px] h-5 px-1.5 text-[10px] font-bold text-zinc-900 bg-white rounded-full">
                             {issues.length}
                         </span>
                     </div>
@@ -53,141 +131,139 @@ export default function IssueSidebar() {
             </div>
 
             {/* Content */}
-            <div className="flex-1 overflow-y-auto bg-slate-50/50 p-3">
-                {selectedIssue ? (
-                    // Detail View
-                    <div className="space-y-4">
-                        <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm">
-                            <div className="flex flex-wrap gap-2 mb-3">
-                                <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${getPriorityColor(selectedIssue.priority)}`}>
-                                    {selectedIssue.priority}
-                                </span>
-                                <span className="text-[10px] uppercase font-bold text-slate-500 px-2 py-0.5 bg-slate-100 rounded">
-                                    {selectedIssue.type}
-                                </span>
-                            </div>
-
-                            <h3 className="text-lg font-bold text-slate-900 leading-snug mb-2">{selectedIssue.title}</h3>
-                            <p className="text-xs leading-relaxed text-slate-600 mb-4">{selectedIssue.description}</p>
-
-                            <div className="space-y-3 pt-3 border-t border-slate-50">
-                                <div className="flex items-center justify-between text-xs">
-                                    <span className="text-slate-500 font-medium">Impacted Service</span>
-                                    <div className="flex items-center gap-1.5 text-slate-900 font-medium bg-slate-50 px-2 py-1 rounded border border-slate-100">
-                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                                        {selectedIssue.linkedEntityName}
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-between text-xs">
-                                    <span className="text-slate-500 font-medium">Assignee</span>
-                                    <div className="flex items-center gap-1.5">
-                                        {selectedIssue.assignedTo ? (
-                                            <>
-                                                <div className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-[10px] font-bold">
-                                                    {selectedIssue.assignedTo.charAt(0)}
-                                                </div>
-                                                <span className="font-medium text-slate-900">{selectedIssue.assignedTo}</span>
-                                            </>
-                                        ) : (
-                                            <span className="text-slate-400 italic">Unassigned</span>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Actions */}
-                        {selectedIssue.status !== 'done' && (
-                            <button
-                                onClick={() => updateIssueStatus(selectedIssue.id, 'done')}
-                                className="w-full py-2 bg-slate-900 text-white text-xs font-semibold rounded-lg shadow-sm hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
-                            >
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                Mark as Resolved
-                            </button>
-                        )}
-
-                        {/* Comments */}
-                        <div className="pt-2">
-                            <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Discussion</h4>
-                            <div className="space-y-3 mb-4">
-                                {selectedIssue.comments.length === 0 && (
-                                    <div className="text-center py-6 bg-slate-50 rounded border border-dashed border-slate-200">
-                                        <p className="text-[10px] text-slate-400">No comments yet.</p>
-                                    </div>
-                                )}
-                                {selectedIssue.comments.map(c => (
-                                    <div key={c.id} className="flex gap-2.5 group">
-                                        <div className="w-6 h-6 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600 shrink-0 shadow-sm">
-                                            {c.author.charAt(0)}
-                                        </div>
-                                        <div className="flex-1">
-                                            <div className="flex items-baseline gap-2 mb-0.5">
-                                                <span className="text-xs font-bold text-slate-900">{c.author}</span>
-                                                <span className="text-[10px] text-slate-400">{new Date(c.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                                            </div>
-                                            <div className="text-xs text-slate-600 bg-white p-2.5 rounded-lg rounded-tl-none border border-slate-100 shadow-sm">
-                                                {c.content}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                ) : (
-                    // List View
-                    <div className="space-y-2">
-                        {issues.map(issue => (
-                            <div
-                                key={issue.id}
-                                onClick={() => setSelectedIssueId(issue.id)}
-                                className="group bg-white p-3 rounded-lg border border-slate-100 hover:border-indigo-500/30 hover:shadow-md cursor-pointer transition-all duration-200 relative overflow-hidden"
-                            >
-                                <div className="flex justify-between items-start mb-1.5 gap-3">
-                                    <h4 className="text-[13px] font-bold text-slate-900 leading-snug group-hover:text-indigo-600 transition-colors">
-                                        {issue.title}
-                                    </h4>
-                                    <div className={`w-2 h-2 rounded-full shrink-0 mt-1 ${issue.priority === 'critical' ? 'bg-red-500' :
-                                        issue.priority === 'high' ? 'bg-orange-500' :
-                                            'bg-slate-300'
-                                        }`} />
-                                </div>
-                                <p className="text-[11px] text-slate-500 line-clamp-2 mb-3 leading-relaxed">
-                                    {issue.description}
-                                </p>
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-1.5 px-1.5 py-0.5 bg-slate-50 rounded text-[10px] font-medium text-slate-500 border border-slate-100/50">
-                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-60"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                                        {issue.linkedEntityName}
-                                    </div>
-                                    <span className="text-[10px] text-slate-400 font-medium">
-                                        {new Date(issue.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-0">
+                <AnimatePresence mode="wait">
+                    {selectedIssue ? (
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            className="min-h-full flex flex-col"
+                        >
+                            {/* Issue Details Box */}
+                            <div className="p-5 border-b border-white/[0.04] bg-white/[0.01]">
+                                <div className="flex flex-wrap gap-2 mb-4">
+                                    <span className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider border ${getPriorityColor(selectedIssue.priority)}`}>
+                                        {selectedIssue.priority}
+                                    </span>
+                                    <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider text-zinc-400 bg-zinc-800 border border-transparent">
+                                        {selectedIssue.type}
                                     </span>
                                 </div>
+                                <h1 className="text-lg font-semibold text-white mb-3 leading-snug">{selectedIssue.title}</h1>
+                                <p className="text-sm text-zinc-400 leading-relaxed mb-6">{selectedIssue.description}</p>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="p-3 rounded-lg bg-[#111114] border border-white/[0.04]">
+                                        <div className="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold mb-1">Impact</div>
+                                        <div className="text-xs font-medium text-zinc-300 flex items-center gap-2">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+                                            {selectedIssue.linkedEntityName}
+                                        </div>
+                                    </div>
+                                    <div className="p-3 rounded-lg bg-[#111114] border border-white/[0.04]">
+                                        <div className="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold mb-1">Assignee</div>
+                                        <div className="text-xs font-medium text-zinc-300 flex items-center gap-2">
+                                            <div className="w-4 h-4 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-[8px] font-bold">
+                                                {selectedIssue.assignedTo ? selectedIssue.assignedTo.charAt(0) : '?'}
+                                            </div>
+                                            {selectedIssue.assignedTo || 'Unassigned'}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        ))}
-                    </div>
-                )}
+
+                            {/* Comments Section */}
+                            <div className="flex-1 p-5 pb-24">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Discussion</h3>
+                                    <div className="h-px flex-1 bg-white/[0.04] ml-4" />
+                                </div>
+
+                                {selectedIssue.comments.length === 0 ? (
+                                    <div className="flex flex-col items-center justify-center py-10 text-zinc-600">
+                                        <MessageSquare className="w-8 h-8 mb-2 opacity-20" />
+                                        <p className="text-xs">No comments yet. Start the discussion.</p>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-6">
+                                        {selectedIssue.comments.map(c => (
+                                            <CommentItem key={c.id} comment={c} />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="p-2 space-y-2"
+                        >
+                            {issues.map(issue => (
+                                <button
+                                    key={issue.id}
+                                    onClick={() => setSelectedIssueId(issue.id)}
+                                    className="w-full text-left group relative p-4 rounded-xl border border-white/[0.04] bg-[#111114] hover:bg-[#16161a] hover:border-white/[0.08] transition-all duration-200"
+                                >
+                                    <div className="flex justify-between items-start mb-2">
+                                        <h4 className="text-[13px] font-medium text-zinc-200 group-hover:text-indigo-400 transition-colors line-clamp-1 pr-8">
+                                            {issue.title}
+                                        </h4>
+                                        <div className={`absolute top-4 right-4 w-2 h-2 rounded-full ${issue.priority === 'critical' ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.4)]' :
+                                                issue.priority === 'high' ? 'bg-orange-500' :
+                                                    'bg-blue-500'
+                                            }`} />
+                                    </div>
+                                    <p className="text-[12px] text-zinc-500 line-clamp-2 mb-3 leading-relaxed">
+                                        {issue.description}
+                                    </p>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[10px] font-mono text-zinc-600 bg-white/[0.02] px-1.5 py-0.5 rounded">
+                                            {issue.linkedEntityName}
+                                        </span>
+                                        <span className="text-[10px] text-zinc-600">
+                                            {new Date(issue.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
+                                        </span>
+                                    </div>
+                                </button>
+                            ))}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
 
-            {/* Comment Input (Only in Detail View) */}
+            {/* Input Footer */}
             {selectedIssue && (
-                <div className="p-3 bg-white border-t border-slate-200">
-                    <form onSubmit={handleSendComment} className="relative group">
-                        <input
-                            type="text"
-                            className="w-full pl-3 pr-10 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-indigo-500 focus:bg-white text-slate-900 placeholder-slate-400 transition-all"
-                            placeholder="Write a comment..."
-                            value={commentText}
-                            onChange={(e) => setCommentText(e.target.value)}
-                        />
+                <div className="p-4 bg-[#0a0a0c] border-t border-white/[0.04] relative z-20">
+                    {replyToId && (
+                        <div className="flex items-center justify-between text-[11px] text-indigo-400 mb-2 px-2">
+                            <span>Replying to comment...</span>
+                            <button onClick={() => setReplyToId(null)} className="hover:text-white">
+                                <X className="w-3 h-3" />
+                            </button>
+                        </div>
+                    )}
+                    <form onSubmit={handleSendComment} className="relative flex items-center gap-2">
+                        <div className="relative flex-1">
+                            <input
+                                type="text"
+                                className="w-full pl-4 pr-10 py-2.5 text-sm bg-[#16161a] border border-white/[0.06] rounded-lg focus:outline-none focus:border-indigo-500/40 focus:bg-[#1a1a1e] text-zinc-200 placeholder-zinc-600 transition-all shadow-inner"
+                                placeholder={replyToId ? "Write a reply..." : "Discuss this issue..."}
+                                value={commentText}
+                                onChange={(e) => setCommentText(e.target.value)}
+                            />
+                            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                                {/* Optional: Add attachment button later */}
+                            </div>
+                        </div>
                         <button
                             type="submit"
                             disabled={!commentText.trim()}
-                            className="absolute right-1.5 top-1.5 p-1 bg-indigo-600 text-white rounded-md opacity-0 group-focus-within:opacity-100 disabled:opacity-0 hover:bg-indigo-700 transition-all shadow-sm"
+                            className="p-2.5 bg-indigo-600 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-500/20 active:scale-95"
                         >
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                            <Send className="w-4 h-4" />
                         </button>
                     </form>
                 </div>
@@ -195,3 +271,4 @@ export default function IssueSidebar() {
         </aside>
     );
 }
+

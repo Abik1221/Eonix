@@ -8,14 +8,17 @@ import Pricing from '@/components/sections/Pricing';
 
 export default function Home() {
   return (
-    <main>
+    <>
       <Navbar />
-      <Hero />
-      <HowItWorks />
-      <ImageGallery />
-      <Pricing />
-      <FAQ />
-      <Footer />
-    </main>
+      <main style={{ position: 'relative', zIndex: 1 }}>
+        <Hero />
+        <HowItWorks />
+        <ImageGallery />
+        <Pricing />
+        <FAQ />
+        <Footer />
+      </main>
+    </>
   );
 }
+

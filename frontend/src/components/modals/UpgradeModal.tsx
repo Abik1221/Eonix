@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Check, Zap, Shield, GitBranch, Sparkles } from 'lucide-react';
 
 interface UpgradeModalProps {
     isOpen: boolean;
@@ -11,135 +13,131 @@ export default function UpgradeModal({ isOpen, onClose }: UpgradeModalProps) {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
-            <div
-                className="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
-                onClick={onClose}
-            />
+        <AnimatePresence>
+            {isOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 font-sans">
+                    {/* Backdrop */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={onClose}
+                        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                    />
 
-            {/* Modal Content */}
-            <div className="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                <button
-                    onClick={onClose}
-                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 transition-colors z-10"
-                >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-
-                <div className="grid md:grid-cols-2">
-                    {/* Left Side: Value Prop & Free Plan */}
-                    <div className="p-8 md:p-12 bg-gray-50 border-r border-gray-100">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Upgrade Your Workspace</h2>
-                        <p className="text-gray-600 mb-8">Unlock the full power of Eonix with advanced AI insights and unlimited access.</p>
-
-                        <div className="space-y-6">
-                            <div>
-                                <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">Current Plan (Free)</h3>
-                                <ul className="space-y-3">
-                                    <li className="flex items-center text-gray-600 text-sm">
-                                        <CheckIcon className="text-gray-400 mr-2" />
-                                        <span>1 Workspace & 1 Project</span>
-                                    </li>
-                                    <li className="flex items-center text-gray-600 text-sm">
-                                        <CheckIcon className="text-gray-400 mr-2" />
-                                        <span>Basic Architecture Maps</span>
-                                    </li>
-                                    <li className="flex items-center text-gray-600 text-sm">
-                                        <CheckIcon className="text-gray-400 mr-2" />
-                                        <span>Static Code Analysis</span>
-                                    </li>
-                                    <li className="flex items-center text-gray-400 text-sm">
-                                        <XIcon className="mr-2" />
-                                        <span className="line-through">AI Architecture Explanations</span>
-                                    </li>
-                                    <li className="flex items-center text-gray-400 text-sm">
-                                        <XIcon className="mr-2" />
-                                        <span className="line-through">GitHub Integration</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Right Side: Pro Plan */}
-                    <div className="p-8 md:p-12 bg-white relative overflow-hidden">
-                        <div className="absolute top-0 right-0 bg-yellow-400 text-yellow-950 text-xs font-bold px-3 py-1 rounded-bl-lg">
-                            RECOMMENDED
-                        </div>
-
-                        <div className="mb-8">
-                            <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                                <span className="bg-gradient-to-r from-amber-200 to-yellow-400 w-8 h-8 rounded-lg flex items-center justify-center text-yellow-900">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5Z" />
-                                    </svg>
-                                </span>
-                                Pro Plan
-                            </h3>
-                            <div className="mt-4 flex items-baseline">
-                                <span className="text-4xl font-bold text-gray-900">$29</span>
-                                <span className="text-gray-500 ml-2">/ month</span>
-                            </div>
-                            <p className="text-sm text-gray-500 mt-1">For startups and small teams</p>
-                        </div>
-
-                        <ul className="space-y-4 mb-8">
-                            <li className="flex items-start text-gray-800 text-sm">
-                                <div className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center mr-3 shrink-0 mt-0.5">
-                                    <CheckIcon size={12} />
-                                </div>
-                                <span><strong>AI Explanations</strong> (200/mo)</span>
-                            </li>
-                            <li className="flex items-start text-gray-800 text-sm">
-                                <div className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center mr-3 shrink-0 mt-0.5">
-                                    <CheckIcon size={12} />
-                                </div>
-                                <span><strong>Full Architecture Graph</strong> (Service + DB + API)</span>
-                            </li>
-                            <li className="flex items-start text-gray-800 text-sm">
-                                <div className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center mr-3 shrink-0 mt-0.5">
-                                    <CheckIcon size={12} />
-                                </div>
-                                <span><strong>5 Projects</strong> & 10 Repositories</span>
-                            </li>
-                            <li className="flex items-start text-gray-800 text-sm">
-                                <div className="w-5 h-5 rounded-full bg-green-100 text-green-600 flex items-center justify-center mr-3 shrink-0 mt-0.5">
-                                    <CheckIcon size={12} />
-                                </div>
-                                <span><strong>GitHub Integration</strong> & Manual Exports</span>
-                            </li>
-                        </ul>
-
-                        <button className="w-full py-4 px-6 bg-[#1a1a1a] hover:bg-black text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                            Upgrade to Pro
+                    {/* Modal Content */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                        transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
+                        className="relative w-full max-w-4xl bg-[#0a0a0c] border border-white/[0.08] rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row"
+                    >
+                        {/* Close Button */}
+                        <button
+                            onClick={onClose}
+                            className="absolute top-4 right-4 p-2 text-zinc-500 hover:text-white bg-black/20 hover:bg-white/10 rounded-full transition-all z-20"
+                        >
+                            <X className="w-5 h-5" />
                         </button>
-                        <p className="text-center text-xs text-gray-400 mt-4">
-                            Secure payment via Stripe • Cancel anytime
-                        </p>
-                    </div>
+
+                        {/* Left Side: Current Plan */}
+                        <div className="p-8 md:p-10 bg-[#0a0a0c] w-full md:w-5/12 border-r border-white/[0.04] flex flex-col justify-center">
+                            <h3 className="text-zinc-500 font-semibold uppercase tracking-wider text-xs mb-2">Current Plan</h3>
+                            <h2 className="text-2xl font-bold text-white mb-6">Free Tier</h2>
+
+                            <ul className="space-y-4 mb-8">
+                                <ListItem dimmed>1 Workspace & Project</ListItem>
+                                <ListItem dimmed>Basic Architecture Maps</ListItem>
+                                <ListItem dimmed>Static Code Analysis</ListItem>
+                                <ListItem excluded>AI Explanations</ListItem>
+                                <ListItem excluded>GitHub Integration</ListItem>
+                                <ListItem excluded>Advanced Security Rules</ListItem>
+                            </ul>
+
+                            <div className="mt-auto pt-6 border-t border-white/[0.04]">
+                                <p className="text-zinc-500 text-sm leading-relaxed">
+                                    You are currently on the free plan. Upgrade to unlock the full potential of Eonix.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Right Side: Pro Plan (Highlighted) */}
+                        <div className="relative p-8 md:p-10 bg-gradient-to-br from-[#111114] to-[#0a0a0c] w-full md:w-7/12 flex flex-col overflow-hidden">
+                            {/* Decorative Glows */}
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                            <div className="absolute bottom-0 left-0 w-40 h-40 bg-purple-600/10 rounded-full blur-[60px] translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+
+                            <div className="relative z-10">
+                                <div className="flex items-center justify-between mb-2">
+                                    <div className="flex items-center gap-2">
+                                        <div className="p-2 bg-indigo-500/10 border border-indigo-500/20 rounded-lg">
+                                            <Zap className="w-5 h-5 text-indigo-400" fill="currentColor" fillOpacity={0.2} />
+                                        </div>
+                                        <span className="text-sm font-bold text-indigo-400 uppercase tracking-wider">Pro Plan</span>
+                                    </div>
+                                    <span className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-lg shadow-indigo-500/20">
+                                        Recommended
+                                    </span>
+                                </div>
+
+                                <div className="mb-8">
+                                    <div className="flex items-baseline gap-1 mt-4">
+                                        <span className="text-5xl font-bold text-white tracking-tight">$29</span>
+                                        <span className="text-zinc-500 font-medium">/ month</span>
+                                    </div>
+                                    <p className="text-zinc-400 text-sm mt-2">Perfect for startups and growing teams needing advanced insights.</p>
+                                </div>
+
+                                <div className="space-y-4 mb-10">
+                                    <FeatureItem icon={<Sparkles className="w-4 h-4 text-indigo-400" />} title="AI Architecture Explanations" desc="200 credits/mo" />
+                                    <FeatureItem icon={<GitBranch className="w-4 h-4 text-purple-400" />} title="Full Graph Visualization" desc="Service + DB + API + Infra" />
+                                    <FeatureItem icon={<Shield className="w-4 h-4 text-emerald-400" />} title="GitHub Integration" desc="Auto-label PRs & block drift" />
+                                </div>
+
+                                <button className="w-full group relative py-4 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl overflow-hidden transition-all hover:shadow-[0_0_20px_rgba(79,70,229,0.4)] hover:scale-[1.02]">
+                                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 backdrop-blur-sm" />
+                                    <span className="relative flex items-center justify-center gap-2">
+                                        Upgrade Now
+                                        <Zap className="w-4 h-4" fill="currentColor" />
+                                    </span>
+                                </button>
+
+                                <p className="text-center text-[10px] text-zinc-600 mt-4 font-medium uppercase tracking-wider">
+                                    7-day money-back guarantee • Cancel anytime
+                                </p>
+                            </div>
+                        </div>
+                    </motion.div>
                 </div>
+            )}
+        </AnimatePresence>
+    );
+}
+
+function ListItem({ children, excluded = false, dimmed = false }: { children: React.ReactNode, excluded?: boolean, dimmed?: boolean }) {
+    return (
+        <li className={`flex items-center text-sm ${excluded ? 'text-zinc-600 decoration-zinc-700' : dimmed ? 'text-zinc-400' : 'text-zinc-200'}`}>
+            {excluded ? (
+                <X className="w-4 h-4 mr-3 text-zinc-700 shrink-0" />
+            ) : (
+                <Check className={`w-4 h-4 mr-3 shrink-0 ${dimmed ? 'text-zinc-600' : 'text-zinc-400'}`} />
+            )}
+            <span className={excluded ? 'line-through' : ''}>{children}</span>
+        </li>
+    );
+}
+
+function FeatureItem({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) {
+    return (
+        <div className="flex items-start bg-white/[0.03] border border-white/[0.04] p-3 rounded-xl">
+            <div className="mt-0.5 mr-3 p-1.5 bg-[#0a0a0c] rounded-lg border border-white/[0.06]">
+                {icon}
+            </div>
+            <div>
+                <div className="text-sm font-semibold text-zinc-200">{title}</div>
+                <div className="text-xs text-zinc-500">{desc}</div>
             </div>
         </div>
-    );
-}
-
-function CheckIcon({ className = '', size = 16 }: { className?: string, size?: number }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={className}>
-            <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
-    );
-}
-
-function XIcon({ className = '', size = 16 }: { className?: string, size?: number }) {
-    return (
-        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
     );
 }

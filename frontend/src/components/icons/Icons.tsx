@@ -197,3 +197,77 @@ export const Close = ({ className = "w-6 h-6" }: { className?: string }) => (
         <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
     </svg>
 );
+
+// New Dashboard Icons
+export const LayoutDashboard = ({ className = "w-5 h-5" }: { className?: string }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="3" width="7" height="9" rx="1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="14" y="3" width="7" height="5" rx="1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="14" y="12" width="7" height="9" rx="1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="3" y="16" width="7" height="5" rx="1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+);
+
+export const Sitemap = ({ className = "w-5 h-5" }: { className?: string }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="3" width="4" height="4" stroke="currentColor" strokeWidth="2" />
+        <path d="M12 7V13" stroke="currentColor" strokeWidth="2" />
+        <path d="M4 13C4 13 4 10 12 10C20 10 20 13 20 13" stroke="currentColor" strokeWidth="2" />
+        <rect x="2" y="13" width="4" height="4" stroke="currentColor" strokeWidth="2" />
+        <rect x="18" y="13" width="4" height="4" stroke="currentColor" strokeWidth="2" />
+        <rect x="10" y="13" width="4" height="4" stroke="currentColor" strokeWidth="2" />
+        <path d="M12 17V20" stroke="currentColor" strokeWidth="2" />
+    </svg>
+);
+
+export const Globe = ({ className = "w-5 h-5" }: { className?: string }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+        <path d="M2 12H22" stroke="currentColor" strokeWidth="2" />
+        <path d="M12 2C14.5013 4.73835 15.9228 8.29203 16 12C15.9228 15.708 14.5013 19.2616 12 22C9.49872 19.2616 8.07725 15.708 8 12C8.07725 8.29203 9.49872 4.73835 12 2Z" stroke="currentColor" strokeWidth="2" />
+    </svg>
+);
+
+export const Database = ({ className = "w-5 h-5" }: { className?: string }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="12" cy="5" rx="9" ry="3" stroke="currentColor" strokeWidth="2" />
+        <path d="M21 12C21 13.66 16.97 15 12 15C7.03 15 3 13.66 3 12" stroke="currentColor" strokeWidth="2" />
+        <path d="M3 5V19C3 20.66 7.03 22 12 22C16.97 22 21 20.66 21 19V5" stroke="currentColor" strokeWidth="2" />
+    </svg>
+);
+
+export const Layers = ({ className = "w-5 h-5" }: { className?: string }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+);
+
+export const Cloud = ({ className = "w-5 h-5" }: { className?: string }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 10H17.74C17.6534 8.79058 17.2001 7.6432 16.4426 6.66667C15.6852 5.69014 14.6611 4.93322 13.5133 4.50285C12.3655 4.07248 11.1508 3.99042 9.97935 4.2682C8.80788 4.54599 7.73887 5.16912 6.92 6.05C5.87707 7.15243 5.37894 8.65751 5.53 10.17C4.19507 10.5186 3.06456 11.3653 2.36442 12.5398C1.66428 13.7142 1.44654 15.129 1.75545 16.4952C2.06437 17.8614 2.87693 19.0792 4.02704 19.9015C5.17715 20.7238 6.57948 21.0903 7.95 20.92H18C19.0609 20.92 20.0783 20.4986 20.8284 19.7485C21.5786 18.9984 22 17.9809 22 16.92C22 15.8591 21.5786 14.8416 20.8284 14.0915C20.0783 13.3414 19.0609 12.92 18 12.92V10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+);
+
+export const Zap = ({ className = "w-5 h-5" }: { className?: string }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+);
+
+export const Settings = ({ className = "w-5 h-5" }: { className?: string }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12.22 2H11.78C11.23 2 10.75 2.37 10.61 2.91L10.34 4.09C9.72 4.29 9.14 4.58 8.61 4.95L7.54 4.51C7.03 4.3 6.46 4.45 6.13 4.88L5.27 6.01C4.98 6.39 5.01 6.92 5.34 7.27L6.29 8.21C6.22 8.52 6.18 8.85 6.18 9.19C6.18 9.53 6.22 9.87 6.29 10.18L5.34 11.13C5.01 11.47 4.97 12 5.27 12.39L6.13 13.52C6.46 13.95 7.03 14.1 7.54 13.89L8.61 13.45C9.15 13.82 9.73 14.11 10.35 14.31L10.61 15.49C10.75 16.03 11.23 16.4 11.78 16.4H12.22C12.77 16.4 13.25 16.03 13.39 15.49L13.65 14.31C14.27 14.11 14.85 13.82 15.39 13.45L16.46 13.89C16.97 14.1 17.54 13.95 17.87 13.52L18.73 12.39C19.03 12 18.99 11.47 18.66 11.12L17.71 10.18C17.78 9.87 17.82 9.53 17.82 9.19C17.82 8.85 17.78 8.52 17.71 8.21L18.66 7.27C18.99 6.92 19.03 6.39 18.73 6.01L17.87 4.88C17.54 4.45 16.97 4.3 16.46 4.51L15.39 4.95C14.86 4.58 14.28 4.29 13.66 4.09L13.39 2.91C13.25 2.37 12.77 2 12.22 2ZM12 11.8C10.56 11.8 9.4 10.64 9.4 9.2C9.4 7.76 10.56 6.6 12 6.6C13.44 6.6 14.6 7.76 14.6 9.2C14.6 10.64 13.44 11.8 12 11.8Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+);
+
+export const FileText = ({ className = "w-5 h-5" }: { className?: string }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M16 13H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M16 17H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M10 9H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+);
