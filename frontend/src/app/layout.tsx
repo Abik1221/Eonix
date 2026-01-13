@@ -1,11 +1,31 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Outfit, DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+/* ============================================================================
+   FONT CONFIGURATION
+   Using Outfit for headings (geometric, modern) and DM Sans for body text.
+   These are production-grade fonts used by companies like Stripe and Linear.
+   ============================================================================ */
+
+const outfit = Outfit({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-outfit",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
 });
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+});
+
+/* ============================================================================
+   SEO METADATA
+   Comprehensive meta tags for search engines and social sharing.
+   ============================================================================ */
 
 export const metadata: Metadata = {
   title: "Eonix - Semantic Repository Mapping Platform",
@@ -30,14 +50,20 @@ export const metadata: Metadata = {
   },
 };
 
+/* ============================================================================
+   ROOT LAYOUT
+   Applies font variables to the entire application.
+   Dark mode is the default theme for this premium design.
+   ============================================================================ */
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.variable} antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${outfit.variable} ${dmSans.variable} antialiased`}>
         {children}
       </body>
     </html>

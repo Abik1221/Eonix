@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, GitCommit, ArrowRight, AlertTriangle } from 'lucide-react';
+import { X, GitCommit, ArrowRight, AlertTriangle, Zap, CheckCircle, Database } from 'lucide-react';
+import './dashboard.css';
 
 interface ChangeEvent {
     id: string;
@@ -58,87 +59,77 @@ const MOCK_HISTORY: ChangeEvent[] = [
     },
 ];
 
+const TypeIcon = ({ type }: { type: ChangeEvent['type'] }) => {
+    switch (type) {
+        case 'violation': return <AlertTriangle className="w-3 h-3" />;
+        case 'feature': return <Zap className="w-3 h-3" />;
+        case 'fix': return <CheckCircle className="w-3 h-3" />;
+        case 'refactor': return <Database className="w-3 h-3" />;
+        default: return <GitCommit className="w-3 h-3" />;
+    }
+};
+
 export const ChangeHistory: React.FC<ChangeHistoryProps> = ({ isOpen, onClose }) => {
     return (
         <AnimatePresence>
             {isOpen && (
                 <>
                     {/* Backdrop */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={onClose}
-                        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
-                    />
+                    <div className="history-backdrop" onClick={onClose} />
 
                     {/* Sidebar */}
                     <motion.div
                         initial={{ x: '100%' }}
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
-                        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                        className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-zinc-900 border-l border-white/10 z-50 flex flex-col shadow-2xl"
+                        transition={{ type: 'spring', damping: 30, stiffness: 300, mass: 0.8 }}
+                        className="history-sidebar"
                     >
-                        <div className="flex items-center justify-between p-6 border-b border-white/10">
-                            <div>
-                                <h2 className="text-xl font-semibold text-white">Architecture History</h2>
-                                <p className="text-sm text-zinc-400">Timeline of detected changes</p>
+                        <div className="history-header">
+                            <div className="history-title">
+                                <h2>Architecture History</h2>
+                                <p>Timeline of detected changes</p>
                             </div>
-                            <button
-                                onClick={onClose}
-                                className="p-2 text-zinc-400 hover:text-white hover:bg-white/5 rounded-full transition-colors"
-                            >
+                            <button onClick={onClose} className="btn-close-history">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                        <div className="history-content custom-scrollbar">
                             {MOCK_HISTORY.map((event, index) => (
-                                <div key={event.id} className="relative pl-8">
-                                    {/* Timeline Line */}
-                                    {index !== MOCK_HISTORY.length - 1 && (
-                                        <div className="absolute top-2 left-[11px] bottom-[-24px] w-px bg-white/10" />
-                                    )}
+                                <div key={event.id} className="timeline-item">
+                                    <div className="timeline-line" />
 
-                                    {/* Icon */}
-                                    <div className={`absolute top-0 left-0 w-6 h-6 rounded-full border-2 flex items-center justify-center bg-zinc-900 z-10
-                    ${event.type === 'violation' ? 'border-rose-500 text-rose-500' :
-                                            event.type === 'feature' ? 'border-emerald-500 text-emerald-500' :
-                                                'border-blue-500 text-blue-500'}`}
-                                    >
-                                        {event.type === 'violation' ? <AlertTriangle className="w-3 h-3" /> : <GitCommit className="w-3 h-3" />}
+                                    <div className={`timeline-icon ${event.type}`}>
+                                        <TypeIcon type={event.type} />
                                     </div>
 
-                                    {/* Content */}
-                                    <div className="group rounded-lg border border-white/5 bg-white/5 p-4 hover:border-white/10 transition-colors">
-                                        <div className="flex items-start justify-between mb-2">
-                                            <h3 className="text-sm font-medium text-white">{event.title}</h3>
-                                            <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-500">
-                                                {event.type}
-                                            </span>
+                                    <div className="timeline-card">
+                                        <div className="timeline-header">
+                                            <span className="timeline-title">{event.title}</span>
+                                            <span className="timeline-tag">{event.type}</span>
                                         </div>
 
-                                        <p className="text-sm text-zinc-400 mb-3 leading-relaxed">
+                                        <p className="timeline-desc">
                                             {event.description}
                                         </p>
 
-                                        <div className="flex items-center justify-between text-xs text-zinc-500">
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-5 h-5 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-[10px] text-white font-bold">
+                                        <div className="timeline-meta">
+                                            <div className="meta-author">
+                                                <div className="author-avatar">
                                                     {event.author.charAt(0)}
                                                 </div>
                                                 <span>{event.author}</span>
                                             </div>
-                                            <span className="font-mono">{event.timestamp}</span>
+                                            <span style={{ fontFamily: 'monospace' }}>{event.timestamp}</span>
                                         </div>
                                     </div>
                                 </div>
                             ))}
                         </div>
 
-                        <div className="p-4 border-t border-white/10 bg-zinc-900/50 backdrop-blur-md">
-                            <button className="w-full py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition-colors flex items-center justify-center gap-2">
+                        <div className="history-footer">
+                            <button className="w-full py-3 text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg transition-all hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] flex items-center justify-center gap-2 active:scale-98">
                                 View Full Changelog <ArrowRight className="w-4 h-4" />
                             </button>
                         </div>

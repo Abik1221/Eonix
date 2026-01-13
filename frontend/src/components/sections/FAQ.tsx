@@ -1,142 +1,155 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+/* ============================================================================
+   FAQ - STRIPE STYLE
+   Clean accordion with minimal design.
+   Light background with subtle animations.
+   ============================================================================ */
 
 const faqs = [
     {
-        question: 'Does AI modify my code or guess my architecture?',
-        answer: 'No. Our AI never writes, modifies, or discovers new architecture. It only explains the deterministic graph built from your code via static analysis. You always stay in control.'
+        question: 'Does AI modify my code?',
+        answer: 'No. Our AI never writes or modifies code. It only explains the architecture graph built from static analysis.'
     },
     {
-        question: 'What programming languages and frameworks are supported?',
-        answer: 'We currently support Python, Java, Go, TypeScript, and JavaScript. For frameworks, we handle popular ones (e.g., Django, Spring, Node.js) and will extend support over time.'
+        question: 'What languages are supported?',
+        answer: 'We support Python, Java, Go, TypeScript, and JavaScript. More languages coming soon.'
     },
     {
-        question: 'Can I integrate with tools like GitHub, Jira, or Slack?',
-        answer: 'Yes. You can link repositories, create tickets, receive notifications, and discuss architecture directly in your workflow.'
-    },
-    {
-        question: 'How secure is my code and data?',
-        answer: 'Your code is never sent to third-party AI services. All analysis happens in your environment. We also provide role-based access, secrets scanning, and enterprise-grade compliance features (SOC2 / ISO).'
+        question: 'Is my code secure?',
+        answer: 'Absolutely. Your code never leaves your environment. All analysis happens locally or in your VPC.'
     },
     {
         question: 'Can I collaborate with my team?',
-        answer: 'Absolutely. Invite team members to workspaces, comment on nodes, annotate architecture diagrams, and assign tasks with integrated messaging.'
+        answer: 'Yes. Invite team members, share workspaces, and collaborate on architecture decisions together.'
     },
     {
-        question: 'How does the AI help me as a developer or architect?',
-        answer: 'AI summarizes complex service flows, explains endpoint connections, highlights architectural risks, and answers “why” questions — always based on verified facts.'
-    },
-    {
-        question: 'Can I export diagrams and reports?',
-        answer: 'Yes. Export ERDs, sequence diagrams, and service interaction graphs as PDF or PNG. Enterprise plans offer automated reports.'
-    },
-    {
-        question: 'What if I have a monorepo or multiple microservices?',
-        answer: 'We support both single-repo (monolith) and multi-repo (microservices) projects, stitching services together to provide a unified view.'
-    },
-    {
-        question: 'How is this different from other code analysis tools?',
-        answer: 'Unlike traditional tools that generate static diagrams, we combine deterministic extraction + semantic graph + AI reasoning. You get a living, queryable architecture map, not just a static picture.'
-    },
-    {
-        question: 'How do I get started?',
-        answer: 'Sign up for the free plan, connect your repository via OAuth, and see your architecture mapped instantly. You can invite teammates and connect DevOps tools in minutes.'
+        question: 'How is this different from other tools?',
+        answer: 'We combine deterministic extraction with AI reasoning. You get a living, queryable architecture map, not static diagrams.'
     }
 ];
 
 export default function FAQ() {
     const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-    const toggleAccordion = (index: number) => {
-        setOpenIndex(openIndex === index ? null : index);
-    };
-
     return (
-        <section id="faq" style={{ backgroundColor: '#ffffff', padding: '120px 0' }}>
-            <div className="container" style={{ maxWidth: '1000px', margin: '0 auto', padding: '0 24px' }}>
-                <div style={{ textAlign: 'center', marginBottom: '64px' }}>
-                    <h2 style={{
-                        fontSize: 'clamp(32px, 5vw, 40px)',
-                        fontWeight: 700,
-                        color: '#1a1a1a',
-                        marginBottom: '16px',
-                        letterSpacing: '-0.02em'
+        <section id="faq" style={{
+            backgroundColor: '#fafafa',
+            padding: '140px 0'
+        }}>
+            <div className="container" style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px' }}>
+                {/* Section Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    style={{ textAlign: 'center', marginBottom: '64px' }}
+                >
+                    <p style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '15px',
+                        color: '#6366f1',
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
+                        marginBottom: '16px'
                     }}>
-                        Frequently Asked Questions
-                    </h2>
-                    <p style={{ fontSize: '18px', color: '#666666' }}>
-                        Everything you need to know about Eonix.
+                        FAQ
                     </p>
-                </div>
+                    <h2 style={{
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: 'clamp(36px, 5vw, 48px)',
+                        fontWeight: 700,
+                        color: '#18181b',
+                        letterSpacing: '-0.03em'
+                    }}>
+                        Common questions
+                    </h2>
+                </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8">
+                {/* FAQ Items */}
+                <div>
                     {faqs.map((faq, index) => {
                         const isOpen = openIndex === index;
                         return (
-                            <div
+                            <motion.div
                                 key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.05 }}
                                 style={{
-                                    borderBottom: '1px solid #eaeaea',
+                                    background: '#ffffff',
+                                    borderRadius: '12px',
+                                    marginBottom: '12px',
+                                    overflow: 'hidden',
+                                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)'
                                 }}
                             >
                                 <button
-                                    onClick={() => toggleAccordion(index)}
+                                    onClick={() => setOpenIndex(isOpen ? null : index)}
                                     style={{
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'space-between',
                                         width: '100%',
-                                        padding: '24px 0',
-                                        backgroundColor: 'transparent',
+                                        padding: '20px 24px',
+                                        background: 'transparent',
                                         border: 'none',
                                         cursor: 'pointer',
                                         textAlign: 'left'
                                     }}
-                                    aria-expanded={isOpen}
                                 >
                                     <span style={{
-                                        fontSize: '18px',
+                                        fontFamily: 'var(--font-heading)',
+                                        fontSize: '16px',
                                         fontWeight: 600,
-                                        color: '#1a1a1a',
-                                        paddingRight: '24px'
+                                        color: '#18181b'
                                     }}>
                                         {faq.question}
                                     </span>
-                                    <span style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        width: '24px',
-                                        height: '24px',
-                                        flexShrink: 0,
-                                        color: '#1a1a1a',
-                                        transition: 'transform 0.2s ease',
-                                        transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)'
-                                    }}>
-                                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M7 1V13M1 7H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
-                                    </span>
+                                    <svg
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="#71717a"
+                                        strokeWidth="2"
+                                        style={{
+                                            flexShrink: 0,
+                                            transition: 'transform 0.2s ease',
+                                            transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+                                        }}
+                                    >
+                                        <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
                                 </button>
-                                <div
-                                    style={{
-                                        height: isOpen ? 'auto' : 0,
-                                        overflow: 'hidden',
-                                        transition: 'all 0.3s ease',
-                                        opacity: isOpen ? 1 : 0
-                                    }}
-                                >
-                                    <div style={{
-                                        paddingBottom: '24px',
-                                        fontSize: '16px',
-                                        lineHeight: 1.6,
-                                        color: '#4b5563'
-                                    }}>
-                                        {faq.answer}
-                                    </div>
-                                </div>
-                            </div>
+
+                                <AnimatePresence>
+                                    {isOpen && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: 'auto', opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            transition={{ duration: 0.2 }}
+                                            style={{ overflow: 'hidden' }}
+                                        >
+                                            <div style={{
+                                                padding: '0 24px 20px',
+                                                fontFamily: 'var(--font-body)',
+                                                fontSize: '15px',
+                                                lineHeight: 1.7,
+                                                color: '#52525b'
+                                            }}>
+                                                {faq.answer}
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </motion.div>
                         );
                     })}
                 </div>

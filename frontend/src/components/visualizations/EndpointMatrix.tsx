@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import '../dashboard/dashboard.css';
 
 interface Endpoint {
     method: string;
@@ -14,36 +15,52 @@ interface EndpointMatrixProps {
 }
 
 export default function EndpointMatrix({ endpoints }: EndpointMatrixProps) {
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'active': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-            case 'deprecated': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-            case 'missing': return 'bg-red-500/10 text-red-400 border-red-500/20';
-            default: return 'bg-zinc-800 text-zinc-400 border-zinc-700';
-        }
+    // Helper to highlight path params
+    const formatPath = (path: string) => {
+        return path.split('/').map((part, i) => {
+            if (part.startsWith('{') && part.endsWith('}')) {
+                return <span key={i} className="path-param">/{part}</span>;
+            }
+            return i === 0 ? part : <span key={i}>/{part}</span>;
+        });
     };
 
     return (
-        <div className="w-full bg-[#09090b] rounded-lg border border-white/5 overflow-hidden">
+        <div className="matrix-container">
             <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                    <thead className="text-xs text-zinc-500 uppercase bg-white/5 border-b border-white/5">
+                <table className="matrix-table">
+                    <thead>
                         <tr>
-                            <th className="px-6 py-3 font-medium">Method</th>
-                            <th className="px-6 py-3 font-medium">Endpoint Path</th>
-                            <th className="px-6 py-3 font-medium">Service</th>
-                            <th className="px-6 py-3 font-medium">Status</th>
+                            <th>Method</th>
+                            <th>Endpoint Path</th>
+                            <th>Service</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5">
+                    <tbody>
                         {endpoints.map((ep, idx) => (
-                            <tr key={idx} className="hover:bg-white/5 transition-colors">
-                                <td className="px-6 py-4 font-mono font-semibold text-zinc-300">{ep.method}</td>
-                                <td className="px-6 py-4 font-mono text-zinc-400">{ep.path}</td>
-                                <td className="px-6 py-4 text-zinc-300">{ep.service}</td>
-                                <td className="px-6 py-4">
-                                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(ep.status)}`}>
-                                        {ep.status.toUpperCase()}
+                            <tr key={idx}>
+                                <td>
+                                    <div className={`method-tag method-${ep.method}`}>
+                                        <span className="cell-method">{ep.method}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span className="cell-path">
+                                        {formatPath(ep.path)}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span style={{ fontSize: '13px', fontWeight: 500, color: '#e4e4e7' }}>
+                                        {ep.service}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span className={`status-pill ${ep.status}`}>
+                                        <div className={`w-1.5 h-1.5 rounded-full mr-1 ${ep.status === 'active' ? 'bg-emerald-400' :
+                                                ep.status === 'deprecated' ? 'bg-amber-400' : 'bg-rose-400'
+                                            }`} />
+                                        {ep.status}
                                     </span>
                                 </td>
                             </tr>

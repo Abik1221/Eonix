@@ -1,260 +1,235 @@
+'use client';
+
 import React from 'react';
+import { motion } from 'framer-motion';
+
+/* ============================================================================
+   PRICING 
+   Clean pricing cards with white backgrounds on a light gray section.
+   Highlighted plan uses a subtle gradient border.
+   ============================================================================ */
 
 const plans = [
     {
         name: 'Free',
         price: '$0',
         period: '/month',
-        description: 'Explore your architecture. Perfect for solo devs & side projects.',
+        description: 'Perfect for solo devs exploring their architecture.',
         features: [
-            'Monolithic Architecture Only',
-            '1 Workspace',
-            '1 Project & 1 Repository',
-            '1 Backend Service',
-            'Basic Frontend ↔ Backend Mapping',
-            'Static Analysis (Read-only)',
-            'Service Interaction Graph'
+            '1 workspace',
+            '1 repository',
+            'Basic architecture map',
+            'Static analysis only',
+            'Community support'
         ],
-        excluded: [
-            'Microservices Support',
-            'AI Explanations',
-            'Jira / Slack Integrations',
-            'Export (Watermarked Only)'
-        ],
-        buttonText: 'Get Started',
-        highlight: false,
-        buttonVariant: 'outline'
+        buttonText: 'Get started',
+        highlight: false
     },
     {
         name: 'Pro',
         price: '$29',
         period: '/month',
-        description: 'Ship faster. For indie founders & early-stage startups.',
+        description: 'For indie founders and early-stage startups.',
         features: [
-            'Monolith & Microservices',
-            '3 Workspaces',
-            'Up to 2 Projects',
-            '10 Repositories per Project',
-            'Up to 8 Backend Services',
-            'Full Frontend Visualization',
-            'AI Explanations (200/mo)',
-            'GitHub Integration',
-            'Standard Rule Engine',
-            'Manual Exports (PNG / Mermaid)'
+            '3 workspaces',
+            '10 repositories',
+            'Full architecture visualization',
+            'AI explanations (200/mo)',
+            'GitHub integration',
+            'Priority support'
         ],
-        excluded: [
-            'Jira / Slack Integrations',
-            'Version History'
-        ],
-        buttonText: 'Start Pro Trial',
-        highlight: true,
-        buttonVariant: 'primary'
-    },
-    {
-        name: 'Business',
-        price: '$199',
-        period: '/month',
-        description: 'Scale with confidence. For growing teams & scale-ups.',
-        features: [
-            'Monolith & Microservices',
-            '10 Projects',
-            '30 Repositories per Project',
-            'Up to 40 Backend Services',
-            'Unlimited AI Explanations (Fair-use)',
-            'Jira & Slack Integration',
-            'Version History (Time Travel)',
-            'Advanced Rules (AQL)',
-            'Role-based Dashboards',
-            'Priority Processing Queue'
-        ],
-        excluded: [],
-        buttonText: 'Start Trial',
-        highlight: false,
-        buttonVariant: 'outline'
+        buttonText: 'Start free trial',
+        highlight: true
     },
     {
         name: 'Enterprise',
         price: 'Custom',
         period: '',
-        description: 'Control & compliance. For large orgs & regulated industries.',
+        description: 'For large teams needing control and compliance.',
         features: [
-            'Unlimited Repos & Services',
-            'SSO (SAML / Okta / Azure AD)',
-            'On-prem / VPC Deployment',
-            'SOC2 / ISO27001 Support',
-            'Full Audit Logs',
-            'Custom Rules Engine',
-            'Dedicated Support & SLA',
-            'Security Reviews'
+            'Unlimited everything',
+            'SSO & SAML',
+            'On-premise deployment',
+            'SOC2 / ISO compliance',
+            'Dedicated success manager',
+            'Custom SLA'
         ],
-        excluded: [],
-        buttonText: 'Contact Sales',
-        highlight: false,
-        buttonVariant: 'outline'
+        buttonText: 'Contact sales',
+        highlight: false
     }
 ];
 
 export default function Pricing() {
     return (
-        <section id="pricing" style={{ backgroundColor: '#fafafa', padding: '100px 0' }}>
-            <div className="container" style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }}>
-                {/* Header */}
-                <div style={{ textAlign: 'center', marginBottom: '64px' }}>
+        <section id="pricing" style={{
+            backgroundColor: '#ffffff',
+            padding: '140px 0',
+            position: 'relative'
+        }}>
+            <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
+                {/* Section Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    style={{ textAlign: 'center', marginBottom: '64px' }}
+                >
                     <p style={{
-                        fontSize: '13px',
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '15px',
                         color: '#6366f1',
-                        fontWeight: 700,
+                        fontWeight: 600,
                         textTransform: 'uppercase',
-                        letterSpacing: '1px',
+                        letterSpacing: '0.5px',
                         marginBottom: '16px'
                     }}>
-                        Pricing Plans
+                        Pricing
                     </p>
                     <h2 style={{
-                        fontSize: 'clamp(32px, 5vw, 42px)',
-                        fontWeight: 800,
-                        color: '#1a1a1a',
-                        marginBottom: '16px',
-                        letterSpacing: '-0.02em'
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: 'clamp(36px, 5vw, 52px)',
+                        fontWeight: 700,
+                        color: '#18181b',
+                        letterSpacing: '-0.03em',
+                        marginBottom: '16px'
                     }}>
-                        Choose the right plan for your stack
+                        Simple, transparent pricing
                     </h2>
                     <p style={{
-                        fontSize: 'clamp(16px, 3vw, 18px)',
-                        color: '#666666',
-                        maxWidth: '540px',
-                        margin: '0 auto',
-                        lineHeight: 1.6
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '18px',
+                        color: '#52525b',
+                        maxWidth: '500px',
+                        margin: '0 auto'
                     }}>
-                        Start for free, upgrade when you need more power. No credit card required for free tier.
+                        Start for free. Upgrade when you're ready.
                     </p>
-                </div>
+                </motion.div>
 
-                {/* Pricing Cards Grid */}
+                {/* Pricing Cards */}
                 <div style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
                     gap: '24px',
-                    justifyContent: 'center',
                     alignItems: 'stretch'
                 }}>
                     {plans.map((plan, index) => (
-                        <div
+                        <motion.div
                             key={index}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.1 }}
                             style={{
-                                padding: '32px',
-                                backgroundColor: '#ffffff',
-                                border: plan.highlight ? '2px solid #1a1a1a' : '1px solid #eaeaea',
-                                borderRadius: '16px',
-                                display: 'flex',
-                                flexDirection: 'column',
                                 position: 'relative',
-                                boxShadow: plan.highlight ? '0 20px 40px -12px rgba(0,0,0,0.12)' : '0 4px 6px -1px rgba(0,0,0,0.02)',
-                                transform: plan.highlight ? 'scale(1.02)' : 'none',
-                                zIndex: plan.highlight ? 10 : 1,
-                                transition: 'transform 0.2s ease'
+                                padding: plan.highlight ? '2px' : '0',
+                                background: plan.highlight
+                                    ? 'linear-gradient(135deg, #6366f1, #ec4899, #f59e0b)'
+                                    : 'transparent',
+                                borderRadius: '20px'
                             }}
                         >
-                            {plan.highlight && (
+                            <div style={{
+                                padding: '36px',
+                                background: '#ffffff',
+                                border: plan.highlight ? 'none' : '1px solid #e4e4e7',
+                                borderRadius: plan.highlight ? '18px' : '20px',
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column'
+                            }}>
+                                {/* Plan Name */}
                                 <div style={{
-                                    position: 'absolute',
-                                    top: '-12px',
-                                    left: '50%',
-                                    transform: 'translateX(-50%)',
-                                    backgroundColor: '#1a1a1a',
-                                    color: '#fff',
-                                    padding: '4px 12px',
-                                    borderRadius: '100px',
-                                    fontSize: '12px',
+                                    fontFamily: 'var(--font-heading)',
+                                    fontSize: '18px',
                                     fontWeight: 600,
-                                    whiteSpace: 'nowrap'
-                                }}>
-                                    Most Popular
-                                </div>
-                            )}
-
-                            <div style={{ marginBottom: '32px' }}>
-                                <h3 style={{
-                                    fontSize: '20px',
-                                    fontWeight: 700,
-                                    color: '#1a1a1a',
+                                    color: '#18181b',
                                     marginBottom: '8px'
                                 }}>
                                     {plan.name}
-                                </h3>
-                                <p style={{ fontSize: '14px', color: '#666666', minHeight: '42px', marginBottom: '24px', lineHeight: 1.5 }}>
-                                    {plan.description}
-                                </p>
-                                <div style={{ display: 'flex', alignItems: 'baseline' }}>
-                                    <span style={{ fontSize: '42px', fontWeight: 800, color: '#1a1a1a', letterSpacing: '-1px' }}>
+                                </div>
+
+                                {/* Price */}
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'baseline',
+                                    marginBottom: '12px'
+                                }}>
+                                    <span style={{
+                                        fontFamily: 'var(--font-heading)',
+                                        fontSize: '48px',
+                                        fontWeight: 700,
+                                        color: '#18181b',
+                                        letterSpacing: '-2px'
+                                    }}>
                                         {plan.price}
                                     </span>
                                     {plan.period && (
-                                        <span style={{ fontSize: '15px', color: '#666666', marginLeft: '6px', fontWeight: 500 }}>
+                                        <span style={{
+                                            fontFamily: 'var(--font-body)',
+                                            fontSize: '16px',
+                                            color: '#71717a',
+                                            marginLeft: '4px'
+                                        }}>
                                             {plan.period}
                                         </span>
                                     )}
                                 </div>
+
+                                {/* Description */}
+                                <p style={{
+                                    fontFamily: 'var(--font-body)',
+                                    fontSize: '15px',
+                                    color: '#52525b',
+                                    marginBottom: '28px',
+                                    lineHeight: 1.5
+                                }}>
+                                    {plan.description}
+                                </p>
+
+                                {/* Features */}
+                                <ul style={{
+                                    listStyle: 'none',
+                                    padding: 0,
+                                    margin: '0 0 28px 0',
+                                    flex: 1
+                                }}>
+                                    {plan.features.map((feature, idx) => (
+                                        <li key={idx} style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '10px',
+                                            fontFamily: 'var(--font-body)',
+                                            fontSize: '14px',
+                                            color: '#3f3f46',
+                                            marginBottom: '12px'
+                                        }}>
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5">
+                                                <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
+                                            </svg>
+                                            {feature}
+                                        </li>
+                                    ))}
+                                </ul>
+
+                                {/* CTA Button */}
+                                <button style={{
+                                    width: '100%',
+                                    padding: '14px 24px',
+                                    background: plan.highlight ? '#18181b' : 'transparent',
+                                    color: plan.highlight ? '#ffffff' : '#18181b',
+                                    border: plan.highlight ? 'none' : '1px solid #d4d4d8',
+                                    borderRadius: '100px',
+                                    fontFamily: 'var(--font-body)',
+                                    fontSize: '14px',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease'
+                                }}>
+                                    {plan.buttonText}
+                                </button>
                             </div>
-
-                            {/* Features List */}
-                            <ul style={{
-                                listStyle: 'none',
-                                padding: 0,
-                                margin: '0 0 32px 0',
-                                flex: 1
-                            }}>
-                                {/* Included Features */}
-                                {plan.features.map((feature, idx) => (
-                                    <li key={`inc-${idx}`} style={{
-                                        display: 'flex',
-                                        alignItems: 'start',
-                                        fontSize: '14px',
-                                        color: '#1a1a1a',
-                                        marginBottom: '12px',
-                                        lineHeight: 1.5
-                                    }}>
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style={{ marginRight: '10px', flexShrink: 0, marginTop: '2px' }}>
-                                            <circle cx="12" cy="12" r="10" fill="#dcfce7" />
-                                            <path d="M16 9L10.5 14.5L8 12" stroke="#15803d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
-                                        {feature}
-                                    </li>
-                                ))}
-
-                                {/* Excluded Features (dimmed) */}
-                                {plan.excluded && plan.excluded.map((feature, idx) => (
-                                    <li key={`exc-${idx}`} style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        fontSize: '14px',
-                                        color: '#9ca3af',
-                                        marginBottom: '12px'
-                                    }}>
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style={{ marginRight: '10px', flexShrink: 0 }}>
-                                            <path d="M18 6L6 18M6 6l12 12" stroke="#e5e7eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
-                                        {feature}
-                                    </li>
-                                ))}
-                            </ul>
-
-                            <button style={{
-                                width: '100%',
-                                padding: '14px 24px',
-                                backgroundColor: plan.buttonVariant === 'primary' ? '#1a1a1a' : '#ffffff',
-                                color: plan.buttonVariant === 'primary' ? '#ffffff' : '#1a1a1a',
-                                border: '1px solid #1a1a1a',
-                                borderRadius: '8px',
-                                fontSize: '14px',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                                transition: 'all 0.2s ease',
-                                boxShadow: plan.buttonVariant === 'primary' ? '0 4px 12px rgba(0,0,0,0.1)' : 'none'
-                            }}>
-                                {plan.buttonText}
-                            </button>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </div>

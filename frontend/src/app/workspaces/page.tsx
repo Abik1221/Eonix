@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Logo from '@/components/Logo';
+import './workspace.css';
 
 interface Workspace {
     id: string;
@@ -24,111 +25,48 @@ export default function WorkspacesPage() {
     const handleCreateWorkspace = (e: React.FormEvent) => {
         e.preventDefault();
         if (!newWorkspaceName.trim()) return;
-
-        // In a real app, this would be an API call
         console.log('Creating workspace:', newWorkspaceName);
-        // Redirect to project creation or dashboard
-        // For now, let's assume we go to project creation for the new workspace
         router.push('/projects/create');
     };
 
     const handleSelectWorkspace = (id: string) => {
-        // In a real app, this would set the active workspace context
         console.log('Selected workspace:', id);
-        router.push('/projects/create'); // Or dashboard if projects exist
+        router.push('/projects/create');
     };
 
-    if (isCreating) {
-        return (
-            <div style={{
-                minHeight: '100vh',
-                backgroundColor: '#ffffff',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '20px'
-            }}>
-                <div style={{ width: '100%', maxWidth: '400px' }}>
-                    <div style={{ marginBottom: '32px', textAlign: 'center' }}>
-                        <Logo size={40} color="#1a1a1a" />
-                    </div>
+    return (
+        <div className="workspace-container">
+            {/* Background Animations */}
+            <div className="ws-blur-shape-1" />
+            <div className="ws-blur-shape-2" />
 
-                    <div style={{
-                        padding: '32px',
-                        border: '1px solid #eaeaea',
-                        borderRadius: '12px',
-                        backgroundColor: '#ffffff'
-                    }}>
-                        <h1 style={{
-                            fontSize: '24px',
-                            fontWeight: 600,
-                            color: '#1a1a1a',
-                            marginBottom: '8px',
-                            textAlign: 'center'
-                        }}>
-                            Create a Workspace
-                        </h1>
-                        <p style={{
-                            fontSize: '14px',
-                            color: '#888888',
-                            marginBottom: '24px',
-                            textAlign: 'center'
-                        }}>
-                            Workspaces organize your projects and team members.
-                        </p>
+            {/* Modal Overlay for Creating Workspace */}
+            {isCreating && (
+                <div className="modal-overlay" onClick={(e) => {
+                    if (e.target === e.currentTarget) setIsCreating(false);
+                }}>
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h2 className="modal-title">Create a Workspace</h2>
+                            <p className="modal-desc">Workspaces organize your projects and team members.</p>
+                        </div>
 
                         <form onSubmit={handleCreateWorkspace}>
-                            <div style={{ marginBottom: '20px' }}>
-                                <label style={{
-                                    display: 'block',
-                                    fontSize: '13px',
-                                    fontWeight: 500,
-                                    color: '#1a1a1a',
-                                    marginBottom: '6px'
-                                }}>
-                                    Workspace Name
-                                </label>
+                            <div className="ws-form-group">
+                                <label className="ws-label">Workspace Name</label>
                                 <input
                                     type="text"
                                     value={newWorkspaceName}
                                     onChange={(e) => setNewWorkspaceName(e.target.value)}
                                     placeholder="e.g. Acme Backend"
                                     autoFocus
-                                    style={{
-                                        width: '100%',
-                                        padding: '12px 14px',
-                                        border: '1px solid #e0e0e0',
-                                        borderRadius: '8px',
-                                        fontSize: '14px',
-                                        outline: 'none',
-                                        transition: 'border-color 0.2s ease'
-                                    }}
+                                    className="ws-input"
                                 />
                             </div>
 
-                            <div style={{ marginBottom: '20px' }}>
-                                <label style={{
-                                    display: 'block',
-                                    fontSize: '13px',
-                                    fontWeight: 500,
-                                    color: '#1a1a1a',
-                                    marginBottom: '6px'
-                                }}>
-                                    Industry (Optional)
-                                </label>
-                                <select
-                                    style={{
-                                        width: '100%',
-                                        padding: '12px 14px',
-                                        border: '1px solid #e0e0e0',
-                                        borderRadius: '8px',
-                                        fontSize: '14px',
-                                        outline: 'none',
-                                        backgroundColor: '#fff',
-                                        color: '#1a1a1a'
-                                    }}
-                                >
+                            <div className="ws-form-group">
+                                <label className="ws-label">Industry (Optional)</label>
+                                <select className="ws-select">
                                     <option value="">Select industry...</option>
                                     <option value="fintech">Fintech</option>
                                     <option value="ecommerce">E-commerce</option>
@@ -138,28 +76,9 @@ export default function WorkspacesPage() {
                                 </select>
                             </div>
 
-                            <div style={{ marginBottom: '24px' }}>
-                                <label style={{
-                                    display: 'block',
-                                    fontSize: '13px',
-                                    fontWeight: 500,
-                                    color: '#1a1a1a',
-                                    marginBottom: '6px'
-                                }}>
-                                    Team Size (Optional)
-                                </label>
-                                <select
-                                    style={{
-                                        width: '100%',
-                                        padding: '12px 14px',
-                                        border: '1px solid #e0e0e0',
-                                        borderRadius: '8px',
-                                        fontSize: '14px',
-                                        outline: 'none',
-                                        backgroundColor: '#fff',
-                                        color: '#1a1a1a'
-                                    }}
-                                >
+                            <div className="ws-form-group">
+                                <label className="ws-label">Team Size (Optional)</label>
+                                <select className="ws-select">
                                     <option value="">Select size...</option>
                                     <option value="1-10">1-10</option>
                                     <option value="11-50">11-50</option>
@@ -168,227 +87,91 @@ export default function WorkspacesPage() {
                                 </select>
                             </div>
 
-                            <div style={{ display: 'flex', gap: '12px' }}>
+                            <div className="ws-actions">
                                 <button
                                     type="button"
                                     onClick={() => setIsCreating(false)}
-                                    style={{
-                                        flex: 1,
-                                        padding: '12px 16px',
-                                        backgroundColor: '#ffffff',
-                                        border: '1px solid #e0e0e0',
-                                        borderRadius: '8px',
-                                        fontSize: '14px',
-                                        fontWeight: 500,
-                                        color: '#1a1a1a',
-                                        cursor: 'pointer'
-                                    }}
+                                    className="btn-cancel"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
                                     disabled={!newWorkspaceName.trim()}
-                                    style={{
-                                        flex: 1,
-                                        padding: '12px 16px',
-                                        backgroundColor: '#1a1a1a',
-                                        color: '#ffffff',
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        fontSize: '14px',
-                                        fontWeight: 500,
-                                        cursor: newWorkspaceName.trim() ? 'pointer' : 'not-allowed',
-                                        opacity: newWorkspaceName.trim() ? 1 : 0.7
-                                    }}
+                                    className="btn-create"
                                 >
-                                    Create
+                                    Create Workspace
                                 </button>
                             </div>
                         </form>
                     </div>
                 </div>
-            </div>
-        );
-    }
+            )}
 
-    return (
-        <div style={{
-            minHeight: '100vh',
-            backgroundColor: '#f9fafb',
-            padding: '40px 20px'
-        }}>
-            <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: '40px'
-                }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <Logo size={32} color="#1a1a1a" />
-                        <span style={{ fontSize: '20px', fontWeight: 600, color: '#1a1a1a' }}>Eonix</span>
+            <div className="workspace-content">
+                {/* Header */}
+                <header className="ws-header">
+                    <div className="ws-brand">
+                        <Logo size={28} color="#1a1a1a" />
+                        <span className="ws-brand-text">Eonix</span>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        {/* User Avatar Placeholder */}
-                        <div style={{
-                            width: '32px',
-                            height: '32px',
-                            borderRadius: '50%',
-                            backgroundColor: '#e0e0e0',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '14px',
-                            fontWeight: 500,
-                            color: '#666'
-                        }}>
-                            NK
-                        </div>
+                    <div className="ws-user-profile">
+                        <div className="ws-avatar">NK</div>
                     </div>
-                </div>
+                </header>
 
-                <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-                    <h1 style={{
-                        fontSize: '32px',
-                        fontWeight: 600,
-                        color: '#1a1a1a',
-                        marginBottom: '12px',
-                        letterSpacing: '-0.02em'
-                    }}>
-                        Select a Workspace
-                    </h1>
-                    <p style={{
-                        fontSize: '16px',
-                        color: '#666666'
-                    }}>
-                        Choose a workspace to view your architecture or start a new one.
-                    </p>
-                </div>
+                {/* Main Content */}
+                <main className="ws-main">
+                    <div className="ws-title-group">
+                        <h1 className="ws-title">Select a Workspace</h1>
+                        <p className="ws-subtitle">
+                            Choose a workspace to view your architecture or start a new one to begin analyzing your repositories.
+                        </p>
+                    </div>
 
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-                    gap: '20px',
-                    marginBottom: '40px'
-                }}>
-                    {/* New Workspace Card */}
-                    <button
-                        onClick={() => setIsCreating(true)}
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            height: '180px',
-                            border: '2px dashed #e0e0e0',
-                            borderRadius: '12px',
-                            backgroundColor: 'transparent',
-                            cursor: 'pointer',
-                            transition: 'border-color 0.2s ease, background-color 0.2s ease',
-                        }}
-                        onMouseOver={(e) => {
-                            e.currentTarget.style.borderColor = '#1a1a1a';
-                            e.currentTarget.style.backgroundColor = '#f0f0f0';
-                        }}
-                        onMouseOut={(e) => {
-                            e.currentTarget.style.borderColor = '#e0e0e0';
-                            e.currentTarget.style.backgroundColor = 'transparent';
-                        }}
-                    >
-                        <div style={{
-                            width: '40px',
-                            height: '40px',
-                            borderRadius: '20px',
-                            backgroundColor: '#f0f0f0',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginBottom: '12px',
-                            color: '#1a1a1a'
-                        }}>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d="M12 5v14M5 12h14" />
-                            </svg>
-                        </div>
-                        <span style={{ fontSize: '15px', fontWeight: 500, color: '#1a1a1a' }}>Create Workspace</span>
-                    </button>
-
-                    {/* Existing Workspaces */}
-                    {MOCK_WORKSPACES.map((workspace) => (
+                    <div className="ws-grid">
+                        {/* Create New Card */}
                         <div
-                            key={workspace.id}
-                            onClick={() => handleSelectWorkspace(workspace.id)}
-                            style={{
-                                padding: '24px',
-                                border: '1px solid #eaeaea',
-                                borderRadius: '12px',
-                                backgroundColor: '#ffffff',
-                                cursor: 'pointer',
-                                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'space-between',
-                                height: '180px'
-                            }}
-                            onMouseOver={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.05)';
-                            }}
-                            onMouseOut={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = 'none';
-                            }}
+                            className="ws-card ws-card-create"
+                            onClick={() => setIsCreating(true)}
                         >
-                            <div>
-                                <div style={{
-                                    width: '40px',
-                                    height: '40px',
-                                    borderRadius: '8px',
-                                    backgroundColor: '#1a1a1a',
-                                    color: '#ffffff',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '18px',
-                                    fontWeight: 600,
-                                    marginBottom: '16px'
-                                }}>
-                                    {workspace.name.charAt(0)}
-                                </div>
-                                <h3 style={{
-                                    fontSize: '16px',
-                                    fontWeight: 600,
-                                    color: '#1a1a1a',
-                                    marginBottom: '4px'
-                                }}>
-                                    {workspace.name}
-                                </h3>
-                                <p style={{
-                                    fontSize: '13px',
-                                    color: '#888888'
-                                }}>
-                                    {workspace.role}
-                                </p>
-                            </div>
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                fontSize: '13px',
-                                color: '#666666'
-                            }}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                    <circle cx="9" cy="7" r="4" />
-                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            <div className="ws-create-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
                                 </svg>
-                                {workspace.members} members
                             </div>
+                            <span className="ws-create-text">Create new workspace</span>
                         </div>
-                    ))}
-                </div>
+
+                        {/* Existing Workspaces */}
+                        {MOCK_WORKSPACES.map((workspace) => (
+                            <div
+                                key={workspace.id}
+                                className="ws-card"
+                                onClick={() => handleSelectWorkspace(workspace.id)}
+                            >
+                                <div>
+                                    <div className="ws-avatar-initial">
+                                        {workspace.name.charAt(0)}
+                                    </div>
+                                    <h3 className="ws-name">{workspace.name}</h3>
+                                    <span className="ws-role-badge">{workspace.role}</span>
+                                </div>
+
+                                <div className="ws-meta">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    </svg>
+                                    {workspace.members} members
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </main>
             </div>
         </div>
     );

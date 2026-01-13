@@ -1,153 +1,649 @@
-import React from 'react';
+"use client";
 
-const features = [
-    {
-        title: 'Explain Endpoints',
-        question: 'What does this service do?',
-        value: 'AI generates a context-aware summary of the service’s role and dependencies.',
-        icon: '🔍',
-        color: 'bg-blue-50 text-blue-600'
-    },
-    {
-        title: 'Assess Risks',
-        question: 'Why is this shared DB dangerous?',
-        value: 'AI highlights coupling, points of failure, and violation of 12-factor principles.',
-        icon: '⚠️',
-        color: 'bg-orange-50 text-orange-600'
-    },
-    {
-        title: 'System Summary',
-        question: 'Summarize this ecosystem.',
-        value: 'Instant high-level overview of microservices, events, and data flow.',
-        icon: '🧠',
-        color: 'bg-purple-50 text-purple-600'
-    },
-    {
-        title: 'Grounded QA',
-        question: 'What breaks if I change this?',
-        value: 'Answers referenced directly from your verified architecture graph.',
-        icon: '💬',
-        color: 'bg-green-50 text-green-600'
-    },
-];
+import { cn } from "@/utils/cn";
+import { motion } from "motion/react";
+import { useRef, useState, useEffect } from 'react';
+import { GoCopilot } from "react-icons/go";
+import {
+    IconAdjustmentsBolt,
+    IconCloud,
+    IconCode,
+    IconEaseInOut,
+    IconGraph,
+    IconHelp,
+    IconRouteAltLeft,
+    IconTerminal2,
+} from "@tabler/icons-react";
+import { PointerHighlight } from "@/components/ui/pointer-highlight";
 
 export default function Features() {
+    const features = [
+        {
+            title: "Built for developers",
+            description:
+                "Built for engineers who need to understand complex architectures at a glance.",
+            icon: <IconTerminal2 />,
+        },
+        {
+            title: "Ease of use",
+            description:
+                "Simply connect your repository and get instant architecture insights.",
+            icon: <IconEaseInOut />,
+        },
+        {
+            title: "AI-Powered Analysis",
+            description:
+                "Grounded answers from your actual codebase, no hallucinations.",
+            icon: <IconAdjustmentsBolt />,
+        },
+        {
+            title: "100% Uptime guarantee",
+            description: "Enterprise-grade reliability for mission-critical systems.",
+            icon: <IconCloud />,
+        },
+        {
+            title: "Multi-tenant Architecture",
+            description: "Secure isolation for teams with role-based access control.",
+            icon: <IconRouteAltLeft />,
+        },
+        {
+            title: "24/7 Customer Support",
+            description:
+                "We are available around the clock. Our AI agents never sleep.",
+            icon: <IconHelp />,
+        },
+        {
+            title: "Visual Documentation",
+            description:
+                "Auto-generate diagrams and docs that stay in sync with your code.",
+            icon: <IconGraph />,
+        },
+        {
+            title: "Deep Code Understanding",
+            description: "Analyze dependencies, patterns, and architectural decisions.",
+            icon: <IconCode />,
+        },
+    ];
+
     return (
-        <section id="features" style={{ backgroundColor: '#ffffff', padding: '120px 0' }}>
-            <div className="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
-
-                {/* Header */}
-                <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-                    <h2 style={{
-                        fontSize: 'clamp(32px, 5vw, 48px)',
-                        fontWeight: 800,
-                        color: '#1a1a1a',
-                        marginBottom: '24px',
-                        letterSpacing: '-0.02em',
-                        lineHeight: 1.1
-                    }}>
-                        AI That Understands Your Architecture
-                        <br />
-                        <span style={{ color: '#6366f1' }}>Not Just Your Code</span>
-                    </h2>
-                    <p style={{
-                        fontSize: '18px',
-                        color: '#4b5563',
-                        maxWidth: '600px',
-                        margin: '0 auto',
-                        lineHeight: 1.6
-                    }}>
-                        Get instant, architecturally-aware answers without hallucination risk.
-                    </p>
-                </div>
-
-                {/* Grid */}
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                    gap: '40px',
-                    alignItems: 'stretch'
+        <section id="features" style={{ backgroundColor: '#ffffff', padding: '80px 0' }}>
+            {/* Header */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                style={{ textAlign: 'center', marginBottom: '64px' }}
+            >
+                <p style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '15px',
+                    color: '#6366f1',
+                    fontWeight: 600,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    marginBottom: '16px'
                 }}>
-                    {features.map((feature, index) => (
-                        <div
-                            key={index}
-                            style={{
-                                padding: '32px',
-                                backgroundColor: '#ffffff',
-                                border: '1px solid #f1f5f9',
-                                borderRadius: '24px',
-                                boxShadow: '0 10px 30px -10px rgba(0, 0, 0, 0.05)',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                                height: '100%'
-                            }}
-                            className="group hover:translate-y-[-4px] hover:shadow-xl hover:border-indigo-100"
-                        >
-                            {/* Header */}
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '16px',
-                                marginBottom: '24px'
-                            }}>
-                                <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    borderRadius: '12px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '24px',
-                                    backgroundColor: '#f8fafc'
-                                }}>
-                                    {feature.icon}
-                                </div>
-                                <h3 style={{
-                                    fontSize: '20px',
-                                    fontWeight: 700,
-                                    color: '#0f172a'
-                                }}>
-                                    {feature.title}
-                                </h3>
-                            </div>
+                    Features
+                </p>
+                <h2 style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 'clamp(36px, 5vw, 52px)',
+                    fontWeight: 700,
+                    color: '#18181b',
+                    letterSpacing: '-0.03em',
+                    marginBottom: '16px'
+                }}>
+                    AI That Understands{' '}
+                    <PointerHighlight
+                        rectangleClassName="bg-indigo-100 border-indigo-300 leading-loose"
+                        pointerClassName="text-indigo-500 h-3 w-3"
+                        containerClassName="inline-block"
+                    >
+                        <span className="relative z-10">Your Architecture</span>
+                    </PointerHighlight>
+                </h2>
+                <p style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '18px',
+                    color: '#52525b',
+                    maxWidth: '600px',
+                    margin: '0 auto'
+                }}>
+                    Get instant,{' '}
+                    <PointerHighlight
+                        rectangleClassName="bg-purple-100 border-purple-300 leading-loose"
+                        pointerClassName="text-purple-500 h-3 w-3"
+                        containerClassName="inline-block"
+                    >
+                        <span className="relative z-10">architecturally-aware</span>
+                    </PointerHighlight>
+                    {' '}answers without hallucination risk.
+                </p>
+            </motion.div>
 
-                            {/* Chat interaction simulation */}
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                {/* User Question styling */}
-                                <div style={{
-                                    alignSelf: 'flex-end',
-                                    backgroundColor: '#f1f5f9',
-                                    color: '#475569',
-                                    padding: '12px 18px',
-                                    borderRadius: '16px 16px 0 16px',
-                                    fontSize: '14px',
-                                    fontWeight: 500,
-                                    maxWidth: '90%',
-                                    position: 'relative'
-                                }}>
-                                    "{feature.question}"
-                                </div>
+            {/* AI Card Demo */}
 
-                                {/* AI Answer styling */}
-                                <div style={{
-                                    alignSelf: 'flex-start',
-                                    background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
-                                    color: '#ffffff',
-                                    padding: '16px 20px',
-                                    borderRadius: '16px 16px 16px 0',
-                                    fontSize: '15px',
-                                    lineHeight: 1.5,
-                                    fontWeight: 500,
-                                    boxShadow: '0 4px 12px rgba(79, 70, 229, 0.15)'
-                                }}>
-                                    {feature.value}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+
+            {/* Features Grid */}
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                maxWidth: '1280px',
+                margin: '0 auto',
+                position: 'relative',
+                zIndex: 10,
+            }}>
+                {features.map((feature, index) => (
+                    <Feature key={feature.title} {...feature} index={index} />
+                ))}
             </div>
+
+            <style jsx>{`
+                @media (max-width: 1024px) {
+                    div[style*="gridTemplateColumns: 'repeat(4, 1fr)'"] {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                    }
+                }
+                @media (max-width: 640px) {
+                    div[style*="gridTemplateColumns: 'repeat(4, 1fr)'"] {
+                        grid-template-columns: 1fr !important;
+                    }
+                }
+            `}</style>
         </section>
     );
 }
+
+const Feature = ({
+    title,
+    description,
+    icon,
+    index,
+}: {
+    title: string;
+    description: string;
+    icon: React.ReactNode;
+    index: number;
+}) => {
+    const isFirstCol = index === 0 || index === 4;
+    const isTopRow = index < 4;
+
+    return (
+        <div
+            className="feature-item group/feature"
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                padding: '40px 0',
+                position: 'relative',
+                borderRight: '1px solid #e5e7eb',
+                borderBottom: isTopRow ? '1px solid #e5e7eb' : 'none',
+                borderLeft: isFirstCol ? '1px solid #e5e7eb' : 'none',
+            }}
+        >
+            {/* Hover gradient - top row */}
+            {isTopRow && (
+                <div
+                    className="hover-gradient"
+                    style={{
+                        position: 'absolute',
+                        inset: 0,
+                        height: '100%',
+                        width: '100%',
+                        background: 'linear-gradient(to top, #f3f4f6, transparent)',
+                        pointerEvents: 'none',
+                        opacity: 0,
+                        transition: 'opacity 0.2s ease',
+                    }}
+                />
+            )}
+            {/* Hover gradient - bottom row */}
+            {!isTopRow && (
+                <div
+                    className="hover-gradient"
+                    style={{
+                        position: 'absolute',
+                        inset: 0,
+                        height: '100%',
+                        width: '100%',
+                        background: 'linear-gradient(to bottom, #f3f4f6, transparent)',
+                        pointerEvents: 'none',
+                        opacity: 0,
+                        transition: 'opacity 0.2s ease',
+                    }}
+                />
+            )}
+
+            {/* Icon */}
+            <div style={{
+                marginBottom: '16px',
+                position: 'relative',
+                zIndex: 10,
+                paddingLeft: '40px',
+                paddingRight: '40px',
+                color: '#6b7280',
+            }}>
+                {icon}
+            </div>
+
+            {/* Title with animated bar */}
+            <div style={{
+                fontSize: '18px',
+                fontWeight: 700,
+                marginBottom: '8px',
+                position: 'relative',
+                zIndex: 10,
+                paddingLeft: '40px',
+                paddingRight: '40px',
+            }}>
+                <div
+                    className="title-bar"
+                    style={{
+                        position: 'absolute',
+                        left: 0,
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        height: '24px',
+                        width: '4px',
+                        borderRadius: '0 4px 4px 0',
+                        backgroundColor: '#d1d5db',
+                        transition: 'all 0.2s ease',
+                    }}
+                />
+                <span
+                    className="title-text"
+                    style={{
+                        display: 'inline-block',
+                        color: '#1f2937',
+                        transition: 'transform 0.2s ease',
+                    }}
+                >
+                    {title}
+                </span>
+            </div>
+
+            {/* Description */}
+            <p style={{
+                fontSize: '14px',
+                color: '#6b7280',
+                maxWidth: '280px',
+                position: 'relative',
+                zIndex: 10,
+                paddingLeft: '40px',
+                paddingRight: '40px',
+                lineHeight: 1.5,
+            }}>
+                {description}
+            </p>
+
+            <style jsx>{`
+                .feature-item:hover .hover-gradient {
+                    opacity: 1;
+                }
+                .feature-item:hover .title-bar {
+                    height: 32px;
+                    background-color: #6366f1;
+                }
+                .feature-item:hover .title-text {
+                    transform: translateX(8px);
+                }
+            `}</style>
+        </div>
+    );
+};
+
+// ============================================================================
+// AI LOGOS CARD COMPONENT
+// ============================================================================
+
+const Skeleton = () => {
+    const scale = [1, 1.1, 1];
+    const transform = ["translateY(0px)", "translateY(-4px)", "translateY(0px)"];
+    const sequence = [
+        [".circle-1", { scale, transform }, { duration: 0.8 }],
+        [".circle-2", { scale, transform }, { duration: 0.8 }],
+        [".circle-3", { scale, transform }, { duration: 0.8 }],
+        [".circle-4", { scale, transform }, { duration: 0.8 }],
+        [".circle-5", { scale, transform }, { duration: 0.8 }],
+    ];
+
+    useEffect(() => {
+        // @ts-expect-error - animate sequence type
+        animate(sequence, {
+            repeat: Infinity,
+            repeatDelay: 1,
+        });
+    }, []);
+
+    return (
+        <div style={{
+            padding: '32px',
+            overflow: 'hidden',
+            height: '100%',
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        }}>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                flexShrink: 0,
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '8px',
+            }}>
+                <Container className="circle-1" style={{ height: '32px', width: '32px' }}>
+                    <ClaudeLogo style={{ height: '16px', width: '16px' }} />
+                </Container>
+                <Container className="circle-2" style={{ height: '48px', width: '48px' }}>
+                    <GoCopilot style={{ height: '24px', width: '24px', color: '#1f2937' }} />
+                </Container>
+                <Container className="circle-3" style={{ height: '64px', width: '64px' }}>
+                    <OpenAILogo style={{ height: '32px', width: '32px', color: '#1f2937' }} />
+                </Container>
+                <Container className="circle-4" style={{ height: '48px', width: '48px' }}>
+                    <MetaIconOutline style={{ height: '24px', width: '24px' }} />
+                </Container>
+                <Container className="circle-5" style={{ height: '32px', width: '32px' }}>
+                    <GeminiLogo style={{ height: '16px', width: '16px' }} />
+                </Container>
+            </div>
+
+            {/* Scanning line */}
+            <div
+                className="animate-move"
+                style={{
+                    height: '160px',
+                    width: '1px',
+                    position: 'absolute',
+                    top: '80px',
+                    margin: 'auto',
+                    zIndex: 40,
+                    background: 'linear-gradient(to bottom, transparent, #06b6d4, transparent)',
+                }}
+            >
+                <div style={{
+                    width: '40px',
+                    height: '128px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    position: 'absolute',
+                    left: '-40px',
+                }}>
+                    <Sparkles />
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const Sparkles = () => {
+    const randomMove = () => Math.random() * 2 - 1;
+    const randomOpacity = () => Math.random();
+    const random = () => Math.random();
+
+    return (
+        <div style={{ position: 'absolute', inset: 0 }}>
+            {[...Array(12)].map((_, i) => (
+                <motion.span
+                    key={`star-${i}`}
+                    animate={{
+                        top: `calc(${random() * 100}% + ${randomMove()}px)`,
+                        left: `calc(${random() * 100}% + ${randomMove()}px)`,
+                        opacity: randomOpacity(),
+                        scale: [1, 1.2, 0],
+                    }}
+                    transition={{
+                        duration: random() * 2 + 4,
+                        repeat: Infinity,
+                        ease: "linear",
+                    }}
+                    style={{
+                        position: "absolute",
+                        top: `${random() * 100}%`,
+                        left: `${random() * 100}%`,
+                        width: `2px`,
+                        height: `2px`,
+                        borderRadius: "50%",
+                        zIndex: 1,
+                        backgroundColor: '#1f2937',
+                    }}
+                />
+            ))}
+        </div>
+    );
+};
+
+const Card = ({
+    className,
+    children,
+}: {
+    className?: string;
+    children: React.ReactNode;
+}) => {
+    return (
+        <div
+            className={cn(
+                "max-w-sm w-full mx-auto p-8 rounded-xl border shadow-lg group",
+                className
+            )}
+            style={{
+                backgroundColor: '#f9fafb',
+                borderColor: 'rgba(0,0,0,0.08)',
+                boxShadow: '0 4px 24px -4px rgba(0,0,0,0.08)',
+            }}
+        >
+            {children}
+        </div>
+    );
+};
+
+const CardTitle = ({
+    children,
+    className,
+}: {
+    children: React.ReactNode;
+    className?: string;
+}) => {
+    return (
+        <h3
+            className={cn("text-lg font-semibold py-2", className)}
+            style={{ color: '#1f2937' }}
+        >
+            {children}
+        </h3>
+    );
+};
+
+const CardDescription = ({
+    children,
+    className,
+}: {
+    children: React.ReactNode;
+    className?: string;
+}) => {
+    return (
+        <p
+            className={cn("text-sm font-normal max-w-sm", className)}
+            style={{ color: '#6b7280' }}
+        >
+            {children}
+        </p>
+    );
+};
+
+const CardSkeletonContainer = ({
+    className,
+    children,
+    showGradient = true,
+}: {
+    className?: string;
+    children: React.ReactNode;
+    showGradient?: boolean;
+}) => {
+    return (
+        <div
+            className={cn("h-[15rem] md:h-[20rem] rounded-xl z-40", className)}
+            style={{
+                backgroundColor: showGradient ? '#e5e7eb' : 'transparent',
+                maskImage: showGradient ? 'radial-gradient(50% 50% at 50% 50%, white 0%, transparent 100%)' : 'none',
+                WebkitMaskImage: showGradient ? 'radial-gradient(50% 50% at 50% 50%, white 0%, transparent 100%)' : 'none',
+            }}
+        >
+            {children}
+        </div>
+    );
+};
+
+const Container = ({
+    className,
+    children,
+    style,
+}: {
+    className?: string;
+    children: React.ReactNode;
+    style?: React.CSSProperties;
+}) => {
+    return (
+        <div
+            className={className}
+            style={{
+                height: '64px',
+                width: '64px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'rgba(248,248,248,0.9)',
+                boxShadow: '0px 0px 8px 0px rgba(0,0,0,0.1) inset, 0px 8px 16px -8px rgba(0,0,0,0.2)',
+                ...style,
+            }}
+        >
+            {children}
+        </div>
+    );
+};
+
+// ============================================================================
+// AI LOGO SVGS
+// ============================================================================
+
+const ClaudeLogo = ({ style }: { style?: React.CSSProperties }) => {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            shapeRendering="geometricPrecision"
+            textRendering="geometricPrecision"
+            imageRendering="optimizeQuality"
+            fillRule="evenodd"
+            clipRule="evenodd"
+            viewBox="0 0 512 512"
+            style={style}
+        >
+            <rect fill="#CC9B7A" width="512" height="512" rx="104.187" ry="105.042" />
+            <path
+                fill="#1F1F1E"
+                fillRule="nonzero"
+                d="M318.663 149.787h-43.368l78.952 212.423 43.368.004-78.952-212.427zm-125.326 0l-78.952 212.427h44.255l15.932-44.608 82.846-.004 16.107 44.612h44.255l-79.126-212.427h-45.317zm-4.251 128.341l26.91-74.701 27.083 74.701h-53.993z"
+            />
+        </svg>
+    );
+};
+
+const OpenAILogo = ({ style }: { style?: React.CSSProperties }) => {
+    return (
+        <svg
+            style={style}
+            viewBox="0 0 28 28"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                d="M26.153 11.46a6.888 6.888 0 0 0-.608-5.73 7.117 7.117 0 0 0-3.29-2.93 7.238 7.238 0 0 0-4.41-.454 7.065 7.065 0 0 0-2.41-1.742A7.15 7.15 0 0 0 12.514 0a7.216 7.216 0 0 0-4.217 1.346 7.061 7.061 0 0 0-2.603 3.539 7.12 7.12 0 0 0-2.734 1.188A7.012 7.012 0 0 0 .966 8.268a6.979 6.979 0 0 0 .88 8.273 6.89 6.89 0 0 0 .607 5.729 7.117 7.117 0 0 0 3.29 2.93 7.238 7.238 0 0 0 4.41.454 7.061 7.061 0 0 0 2.409 1.742c.92.404 1.916.61 2.923.604a7.215 7.215 0 0 0 4.22-1.345 7.06 7.06 0 0 0 2.605-3.543 7.116 7.116 0 0 0 2.734-1.187 7.01 7.01 0 0 0 1.993-2.196 6.978 6.978 0 0 0-.884-8.27Zm-10.61 14.71c-1.412 0-2.505-.428-3.46-1.215.043-.023.119-.064.168-.094l5.65-3.22a.911.911 0 0 0 .464-.793v-7.86l2.389 1.36a.087.087 0 0 1 .046.065v6.508c0 2.952-2.491 5.248-5.257 5.248ZM4.062 21.354a5.17 5.17 0 0 1-.635-3.516c.042.025.115.07.168.1l5.65 3.22a.928.928 0 0 0 .928 0l6.898-3.93v2.72a.083.083 0 0 1-.034.072l-5.711 3.255a5.386 5.386 0 0 1-4.035.522 5.315 5.315 0 0 1-3.23-2.443ZM2.573 9.184a5.283 5.283 0 0 1 2.768-2.301V13.515a.895.895 0 0 0 .464.793l6.897 3.93-2.388 1.36a.087.087 0 0 1-.08.008L4.52 16.349a5.262 5.262 0 0 1-2.475-3.185 5.192 5.192 0 0 1 .527-3.98Zm19.623 4.506-6.898-3.93 2.388-1.36a.087.087 0 0 1 .08-.008l5.713 3.255a5.28 5.28 0 0 1 2.054 2.118 5.19 5.19 0 0 1-.488 5.608 5.314 5.314 0 0 1-2.39 1.742v-6.633a.896.896 0 0 0-.459-.792Zm2.377-3.533a7.973 7.973 0 0 0-.168-.099l-5.65-3.22a.93.93 0 0 0-.928 0l-6.898 3.93V8.046a.083.083 0 0 1 .034-.072l5.712-3.251a5.375 5.375 0 0 1 5.698.241 5.262 5.262 0 0 1 1.865 2.28c.39.92.506 1.93.335 2.913ZM9.631 15.009l-2.39-1.36a.083.083 0 0 1-.046-.065V7.075c.001-.997.29-1.973.832-2.814a5.297 5.297 0 0 1 2.231-1.935 5.382 5.382 0 0 1 5.659.72 4.89 4.89 0 0 0-.168.093l-5.65 3.22a.913.913 0 0 0-.465.793l-.003 7.857Zm1.297-2.76L14 10.5l3.072 1.75v3.5L14 17.499l-3.072-1.75v-3.5Z"
+                fill="currentColor"
+            />
+        </svg>
+    );
+};
+
+const GeminiLogo = ({ style }: { style?: React.CSSProperties }) => {
+    return (
+        <svg
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            style={style}
+        >
+            <path
+                d="M16 8.016A8.522 8.522 0 008.016 16h-.032A8.521 8.521 0 000 8.016v-.032A8.521 8.521 0 007.984 0h.032A8.522 8.522 0 0016 7.984v.032z"
+                fill="url(#prefix__paint0_radial_980_20147)"
+            />
+            <defs>
+                <radialGradient
+                    id="prefix__paint0_radial_980_20147"
+                    cx="0"
+                    cy="0"
+                    r="1"
+                    gradientUnits="userSpaceOnUse"
+                    gradientTransform="matrix(16.1326 5.4553 -43.70045 129.2322 1.588 6.503)"
+                >
+                    <stop offset=".067" stopColor="#9168C0" />
+                    <stop offset=".343" stopColor="#5684D1" />
+                    <stop offset=".672" stopColor="#1BA1E3" />
+                </radialGradient>
+            </defs>
+        </svg>
+    );
+};
+
+const MetaIconOutline = ({ style }: { style?: React.CSSProperties }) => {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 287.56 191"
+            style={style}
+        >
+            <defs>
+                <linearGradient
+                    id="linear-gradient"
+                    x1="62.34"
+                    y1="101.45"
+                    x2="260.34"
+                    y2="91.45"
+                    gradientTransform="matrix(1, 0, 0, -1, 0, 192)"
+                    gradientUnits="userSpaceOnUse"
+                >
+                    <stop offset="0" stopColor="#0064e1" />
+                    <stop offset="0.4" stopColor="#0064e1" />
+                    <stop offset="0.83" stopColor="#0073ee" />
+                    <stop offset="1" stopColor="#0082fb" />
+                </linearGradient>
+                <linearGradient
+                    id="linear-gradient-2"
+                    x1="41.42"
+                    y1="53"
+                    x2="41.42"
+                    y2="126"
+                    gradientTransform="matrix(1, 0, 0, -1, 0, 192)"
+                    gradientUnits="userSpaceOnUse"
+                >
+                    <stop offset="0" stopColor="#0082fb" />
+                    <stop offset="1" stopColor="#0064e0" />
+                </linearGradient>
+            </defs>
+            <path
+                fill="#0081fb"
+                d="M31.06,126c0,11,2.41,19.41,5.56,24.51A19,19,0,0,0,53.19,160c8.1,0,15.51-2,29.79-21.76,11.44-15.83,24.92-38,34-52l15.36-23.6c10.67-16.39,23-34.61,37.18-47C181.07,5.6,193.54,0,206.09,0c21.07,0,41.14,12.21,56.5,35.11,16.81,25.08,25,56.67,25,89.27,0,19.38-3.82,33.62-10.32,44.87C271,180.13,258.72,191,238.13,191V160c17.63,0,22-16.2,22-34.74,0-26.42-6.16-55.74-19.73-76.69-9.63-14.86-22.11-23.94-35.84-23.94-14.85,0-26.8,11.2-40.23,31.17-7.14,10.61-14.47,23.54-22.7,38.13l-9.06,16c-18.2,32.27-22.81,39.62-31.91,51.75C84.74,183,71.12,191,53.19,191c-21.27,0-34.72-9.21-43-23.09C3.34,156.6,0,141.76,0,124.85Z"
+            />
+            <path
+                fill="url(#linear-gradient)"
+                d="M24.49,37.3C38.73,15.35,59.28,0,82.85,0c13.65,0,27.22,4,41.39,15.61,15.5,12.65,32,33.48,52.63,67.81l7.39,12.32c17.84,29.72,28,45,33.93,52.22,7.64,9.26,13,12,19.94,12,17.63,0,22-16.2,22-34.74l27.4-.86c0,19.38-3.82,33.62-10.32,44.87C271,180.13,258.72,191,238.13,191c-12.8,0-24.14-2.78-36.68-14.61-9.64-9.08-20.91-25.21-29.58-39.71L146.08,93.6c-12.94-21.62-24.81-37.74-31.68-45C107,40.71,97.51,31.23,82.35,31.23c-12.27,0-22.69,8.61-31.41,21.78Z"
+            />
+            <path
+                fill="url(#linear-gradient-2)"
+                d="M82.35,31.23c-12.27,0-22.69,8.61-31.41,21.78C38.61,71.62,31.06,99.34,31.06,126c0,11,2.41,19.41,5.56,24.51L10.14,167.91C3.34,156.6,0,141.76,0,124.85,0,94.1,8.44,62.05,24.49,37.3,38.73,15.35,59.28,0,82.85,0Z"
+            />
+        </svg>
+    );
+};

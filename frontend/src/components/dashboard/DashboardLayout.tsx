@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import './dashboard.css';
 import {
     LayoutDashboard,
     Sitemap,
@@ -45,7 +46,11 @@ export default function DashboardLayout({ projectId }: { projectId: string }) {
     const renderContent = () => {
         // This logic mimics the old VisualizationLayout but we will improve the container
         if (activeLayer === 'layer-0') {
-            return <MermaidDiagram definition={MOCK_LAYER_0} />;
+            return (
+                <div style={{ padding: '40px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <MermaidDiagram definition={MOCK_LAYER_0} />
+                </div>
+            )
         }
         // Add other layers as needed
         if (activeLayer === 'layer-1') {
@@ -80,17 +85,21 @@ export default function DashboardLayout({ projectId }: { projectId: string }) {
                 { method: "POST", path: "/api/v1/orders", service: "Core Service", "status": "active" as const },
                 { method: "DELETE", path: "/api/v1/orders/{id}", service: "Core Service", "status": "deprecated" as const },
             ];
-            return <EndpointMatrix endpoints={mockEndpoints} />;
+            return (
+                <div style={{ padding: '24px' }}>
+                    <EndpointMatrix endpoints={mockEndpoints} />
+                </div>
+            );
         }
 
         return (
             <div className="h-full flex flex-col items-center justify-center text-zinc-500">
-                <div className="mb-4 text-4xl">🚧</div>
-                <div>Layer {activeLayer} Under Construction</div>
-                <div className="mt-4 flex gap-2">
-                    <button onClick={() => setArchStatus('stable')} className="px-2 py-1 bg-emerald-500/10 text-emerald-500 text-xs rounded">Set Stable</button>
-                    <button onClick={() => setArchStatus('drift')} className="px-2 py-1 bg-amber-500/10 text-amber-500 text-xs rounded">Set Drift</button>
-                    <button onClick={() => setArchStatus('breaking')} className="px-2 py-1 bg-rose-500/10 text-rose-500 text-xs rounded">Set Breaking</button>
+                <div className="mb-4 text-4xl opacity-50">🚧</div>
+                <div className="text-sm font-medium">Layer {activeLayer} Under Construction</div>
+                <div className="mt-8 flex gap-2">
+                    <button onClick={() => setArchStatus('stable')} className="status-indicator stable">Set Stable</button>
+                    <button onClick={() => setArchStatus('drift')} className="status-indicator drift">Set Drift</button>
+                    <button onClick={() => setArchStatus('breaking')} className="status-indicator breaking">Set Breaking</button>
                 </div>
             </div>
         );
@@ -98,101 +107,83 @@ export default function DashboardLayout({ projectId }: { projectId: string }) {
 
     return (
         <IssueProvider>
-            <div className="flex h-screen w-full bg-[#050507] text-zinc-200 overflow-hidden font-sans selection:bg-indigo-500/30">
+            <div className="dashboard-container">
                 {/* Left Sidebar - Navigation */}
-                <aside className="w-[260px] h-screen bg-gradient-to-b from-[#0a0a0c] to-[#08080a] border-r border-white/[0.04] flex flex-col shrink-0">
+                <aside className="sidebar-nav">
                     {/* Logo Header */}
-                    <div className="h-16 flex items-center px-5 border-b border-white/[0.04]">
-                        <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/25 ring-1 ring-white/10">
-                                <Globe className="w-4.5 h-4.5 text-white" />
+                    <div className="sidebar-header">
+                        <div className="brand-wrapper">
+                            <div className="brand-icon">
+                                <Globe className="w-5 h-5 text-white" />
                             </div>
-                            <span className="font-bold text-[17px] tracking-tight text-zinc-100">Eonix</span>
+                            <span className="brand-text">Eonix</span>
                         </div>
                     </div>
 
                     {/* Navigation Items */}
-                    <div className="flex-1 py-5 px-3 overflow-y-auto custom-scrollbar">
-                        <div className="px-3 mb-4 text-[10px] font-semibold text-zinc-600 uppercase tracking-[0.15em]">
-                            Platform
-                        </div>
-                        <nav className="space-y-0.5">
+                    <div className="nav-section custom-scrollbar">
+                        <div className="nav-label">Platform</div>
+                        <nav>
                             {LAYERS.map((layer) => (
                                 <button
                                     key={layer.id}
                                     onClick={() => setActiveLayer(layer.id)}
-                                    className={`group w-full flex items-center h-10 px-3 rounded-lg transition-all duration-150 relative
-                                        ${activeLayer === layer.id
-                                            ? 'bg-gradient-to-r from-indigo-500/10 to-purple-500/5 text-white border border-indigo-500/20'
-                                            : 'text-zinc-500 hover:text-zinc-200 hover:bg-white/[0.03] border border-transparent'
-                                        }
-                                    `}
+                                    className={`nav-item ${activeLayer === layer.id ? 'active' : ''}`}
                                 >
-                                    {activeLayer === layer.id && (
-                                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-gradient-to-b from-indigo-400 to-purple-500 rounded-r-full" />
-                                    )}
-                                    <layer.icon className={`w-[18px] h-[18px] mr-3 transition-colors duration-150 ${activeLayer === layer.id ? 'text-indigo-400' : 'text-zinc-600 group-hover:text-zinc-400'}`} />
-                                    <span className="text-[13px] font-medium tracking-wide">{layer.label}</span>
+                                    <layer.icon className="nav-icon w-[18px] h-[18px]" />
+                                    <span>{layer.label}</span>
                                 </button>
                             ))}
                         </nav>
                     </div>
 
                     {/* User Profile Footer */}
-                    <div className="p-3 border-t border-white/[0.04] bg-[#08080a]">
-                        <div className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/[0.03] cursor-pointer transition-all group border border-transparent hover:border-white/[0.04]">
-                            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-zinc-700 to-zinc-800 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-300 group-hover:text-white transition-colors shadow-sm">NK</div>
-                            <div className="flex-1 min-w-0">
-                                <div className="text-sm font-medium text-zinc-300 group-hover:text-white truncate">Nahom Keneni</div>
-                                <div className="text-[11px] text-zinc-600 group-hover:text-zinc-500 truncate">nahom@eonix.io</div>
+                    <div className="sidebar-footer">
+                        <div className="user-profile">
+                            <div className="w-9 h-9 rounded-lg bg-zinc-800 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-300">NK</div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <div className="text-sm font-medium text-zinc-200 truncate">Nahom Keneni</div>
+                                <div className="text-[11px] text-zinc-500 truncate">nahom@eonix.io</div>
                             </div>
                         </div>
                     </div>
                 </aside>
 
                 {/* Main Content Area */}
-                <div className="flex-1 flex flex-col min-w-0 h-screen">
+                <div className="main-wrapper">
                     {/* Top Header Bar */}
-                    <header className="h-14 border-b border-white/[0.04] flex items-center justify-between px-6 bg-[#0a0a0c]/80 backdrop-blur-xl z-20 shrink-0">
-                        <div className="flex items-center text-[13px]">
-                            <span className="text-zinc-600 font-medium hover:text-zinc-400 transition-colors cursor-pointer">Projects</span>
-                            <span className="mx-2.5 text-zinc-700/50">/</span>
-                            <span className="text-zinc-400 font-medium hover:text-zinc-200 transition-colors cursor-pointer">Eonix</span>
-                            <span className="mx-2.5 text-zinc-700/50">/</span>
-                            <span className="text-zinc-100 font-medium px-2.5 py-1 bg-white/[0.04] rounded-md border border-white/[0.06]">{LAYERS.find(l => l.id === activeLayer)?.label}</span>
+                    <header className="top-header glass-heavy">
+                        <div className="breadcrumb">
+                            <span className="hover:text-white cursor-pointer transition-colors">Projects</span>
+                            <span className="breadcrumb-separator">/</span>
+                            <span className="hover:text-white cursor-pointer transition-colors">Eonix</span>
+                            <span className="breadcrumb-separator">/</span>
+                            <span className="breadcrumb-active">{LAYERS.find(l => l.id === activeLayer)?.label}</span>
                         </div>
                         <div className="flex items-center gap-5">
                             <button
                                 onClick={() => setIsHistoryOpen(true)}
-                                className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[11px] font-semibold transition-all
-                                ${archStatus === 'stable' ? 'bg-emerald-500/[0.08] border-emerald-500/20 text-emerald-400' :
-                                        archStatus === 'drift' ? 'bg-amber-500/[0.08] border-amber-500/20 text-amber-400' :
-                                            archStatus === 'breaking' ? 'bg-rose-500/[0.08] border-rose-500/20 text-rose-400' :
-                                                'bg-zinc-500/[0.08] border-zinc-500/20 text-zinc-400'}
-                            `}>
-                                <div className={`w-2 h-2 rounded-full shadow-[0_0_8px_rgba(255,255,255,0.2)] animate-pulse
-                                    ${archStatus === 'stable' ? 'bg-emerald-400 shadow-emerald-500/50' :
-                                        archStatus === 'drift' ? 'bg-amber-400 shadow-amber-500/50' :
-                                            archStatus === 'breaking' ? 'bg-rose-400 shadow-rose-500/50' :
-                                                'bg-zinc-400'}
-                                `}></div>
-                                <span>{archStatus === 'stable' ? 'System Healthy' : archStatus === 'drift' ? 'Drift Detected' : archStatus === 'breaking' ? 'Breaking Changes' : 'Analyzing...'}</span>
+                                className={`status-indicator ${archStatus}`}
+                            >
+                                <div className="status-dot"></div>
+                                <span>
+                                    {archStatus === 'stable' ? 'System Healthy' :
+                                        archStatus === 'drift' ? 'Drift Detected' :
+                                            archStatus === 'breaking' ? 'Breaking Changes' : 'Analyzing...'}
+                                </span>
                             </button>
                         </div>
                     </header>
 
                     {/* Canvas Area */}
-                    <main className="flex-1 relative bg-[#08080a] overflow-hidden">
+                    <main className="canvas-area">
                         {/* Dot Grid Background */}
-                        <div className="absolute inset-0 z-0 pointer-events-none" style={{
-                            backgroundImage: 'radial-gradient(circle, rgba(63, 63, 70, 0.3) 1px, transparent 1px)',
-                            backgroundSize: '24px 24px',
-                        }}></div>
+                        <div className="grid-background"></div>
 
                         {/* Content Container */}
-                        <div className="relative z-10 w-full h-full overflow-hidden flex flex-col">
+                        <div className="content-container">
                             {/* StatusBar Overlay */}
-                            <div className="px-6 pt-6">
+                            <div className="status-overlay">
                                 <ArchitectureStatusBar
                                     status={archStatus}
                                     lastAnalyzed={lastAnalyzed}
@@ -207,7 +198,7 @@ export default function DashboardLayout({ projectId }: { projectId: string }) {
                                 />
                             </div>
 
-                            <div className="flex-1 overflow-auto px-6 pb-6">
+                            <div className="visualization-wrapper">
                                 {renderContent()}
                             </div>
                         </div>
@@ -217,11 +208,10 @@ export default function DashboardLayout({ projectId }: { projectId: string }) {
                 </div>
 
                 {/* Right Sidebar - Issues Panel */}
-                <aside className="w-[320px] h-screen bg-[#0a0a0c] border-l border-white/[0.04] shrink-0 flex flex-col">
+                <aside className="right-panel">
                     <IssueSidebar />
                 </aside>
             </div>
         </IssueProvider>
     );
 }
-
