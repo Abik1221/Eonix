@@ -216,7 +216,7 @@
 .btn-start {
     width: 100%;
     padding: 16px;
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    background: #6366f1;
     color: #ffffff;
     border: none;
     border-radius: 12px;

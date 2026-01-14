@@ -10,15 +10,14 @@
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(8px);
     z-index: 1000;
-    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Modal Container */
 .upgrade-modal-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative;
     z-index: 1001;
     width: 90%;
     max-width: 900px;
@@ -31,7 +30,6 @@
         0 12px 24px rgba(0, 0, 0, 0.2);
     display: flex;
     overflow: hidden;
-    animation: modalSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Animations */
@@ -231,7 +229,7 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: #fff;
-    background: linear-gradient(135deg, #6366f1, #a855f7);
+    background: #6366f1;
     padding: 4px 10px;
     border-radius: 100px;
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
@@ -315,7 +313,7 @@
 .btn-upgrade-pro {
     width: 100%;
     padding: 16px;
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    background: #6366f1;
     border: none;
     border-radius: 12px;
     color: white;

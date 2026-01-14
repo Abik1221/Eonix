@@ -45,7 +45,7 @@ const ProductCard = memo(function ProductCard() {
                     width: '48px',
                     height: '48px',
                     borderRadius: '12px',
-                    background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                    background: '#6366f1',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
@@ -146,7 +146,7 @@ const StatsCard = memo(function StatsCard() {
                     <div key={i} style={{
                         flex: 1,
                         height: `${h}%`,
-                        background: `linear-gradient(to top, #6366f1, #a78bfa)`,
+                        background: '#6366f1',
                         borderRadius: '2px',
                         opacity: 0.7 + (i * 0.03)
                     }} />
@@ -188,7 +188,7 @@ const FlowCard = memo(function FlowCard() {
                     width: '40px',
                     height: '40px',
                     borderRadius: '10px',
-                    background: 'linear-gradient(135deg, #ec4899, #f59e0b)',
+                    background: '#ec4899',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'

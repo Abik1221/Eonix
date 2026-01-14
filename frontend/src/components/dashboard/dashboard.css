@@ -27,6 +27,33 @@
     --sidebar-width: 260px;
     --right-panel-width: 340px;
     --header-height: 64px;
+
+    /* Focus Ring - Subtle */
+    --focus-ring-color: rgba(99, 102, 241, 0.3);
+    --focus-ring-shadow: 0 0 0 2px var(--focus-ring-color);
+
+}
+
+/* ============================================================================
+   CLEAN FOCUS STATES - Border only, no shadows
+   ============================================================================ */
+
+/* Global Focus Reset */
+.dashboard-container *:focus {
+    outline: none;
+}
+
+.dashboard-container *:focus-visible {
+    outline: 2px solid rgba(99, 102, 241, 0.5);
+    outline-offset: 2px;
+}
+
+/* Input Focus States - just border change */
+.dashboard-container input:focus-visible,
+.dashboard-container textarea:focus-visible,
+.dashboard-container select:focus-visible {
+    outline: none;
+    border-color: rgba(99, 102, 241, 0.4) !important;
 }
 
 /* --- Global Utilities for Dashboard --- */
@@ -134,7 +161,7 @@
     width: 36px;
     height: 36px;
     border-radius: 10px;
-    background: linear-gradient(135deg, var(--neon-indigo), var(--neon-purple));
+    background: var(--neon-indigo);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -217,6 +244,13 @@
 .nav-item.active .nav-icon {
     color: var(--neon-indigo);
     filter: drop-shadow(0 0 5px rgba(99, 102, 241, 0.5));
+}
+
+.nav-item:focus-visible {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: var(--neon-indigo);
+    box-shadow: var(--focus-ring-shadow), var(--focus-glow);
+    color: var(--text-primary);
 }
 
 .sidebar-footer {
@@ -335,9 +369,48 @@
     box-shadow: 0 0 10px rgba(251, 113, 133, 0.5);
 }
 
+/* --- Header Action Buttons --- */
+.header-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 16px;
+}
+
+.header-action-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.header-action-btn.active {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.3);
+    color: var(--neon-indigo);
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
+}
+
+.header-action-btn:focus-visible {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: var(--neon-indigo);
+    box-shadow: var(--focus-ring-shadow), var(--focus-glow);
+    color: var(--neon-indigo);
+    transform: translateY(-1px);
+}
+
 /* --- Canvas Area --- */
 .canvas-area {
     flex: 1;
+
     position: relative;
     background: var(--dash-bg);
     overflow: hidden;

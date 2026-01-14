@@ -12,7 +12,8 @@ import {
     Zap,
     Shield
 } from '../icons/Icons';
-// Importing visualizations from the previous layout or creating wrappers
+import { FiMessageSquare, FiUserPlus } from 'react-icons/fi';
+// Importing visualizations
 import MermaidDiagram from '../visualizations/MermaidDiagram';
 import ServiceMap from '../visualizations/ServiceMap';
 import EndpointMatrix from '../visualizations/EndpointMatrix';
@@ -21,9 +22,24 @@ import IssueSidebar from '../issues/IssueSidebar';
 import { IssueProvider } from '@/context/IssueContext';
 import { ArchitectureStatusBar, ArchitectureStatus } from './ArchitectureStatusBar';
 import { ChangeHistory } from './ChangeHistory';
+import DotGridBackground from './DotGridBackground';
+import ImageContainer from './ImageContainer';
 
-// Mock Data (Moved from VisualizationLayout)
-const MOCK_LAYER_0 = `graph TD\nClient(Client Apps) --> Gateway[API Gateway]\nGateway --> Auth[Auth Service]\nGateway --> Core[Core API]\nCore --> DB[(Primary DB)]\nAuth --> DB`;
+// Collaboration Components
+import { CollaborationProvider, useCollaboration } from '@/context/CollaborationContext';
+import { CommentingSystem, TeamInviteModal } from '../collaboration';
+
+// AI Components
+import { ExplainWithAIButton, AIChatSidebar } from '../ai';
+
+// Mock Data
+const MOCK_LAYER_0 = `graph TD
+Client(Client Apps) --> Gateway[API Gateway]
+Gateway --> Auth[Auth Service]
+Gateway --> Core[Core API]
+Core --> DB[(Primary DB)]
+Auth --> DB`;
+
 
 const LAYERS = [
     { id: 'layer-0', label: 'Overview', icon: LayoutDashboard },
@@ -36,25 +52,46 @@ const LAYERS = [
     { id: 'layer-7', label: 'Security Flow', icon: Shield },
 ];
 
-export default function DashboardLayout({ projectId }: { projectId: string }) {
+// Inner component that uses collaboration context
+function DashboardContent({ projectId }: { projectId: string }) {
     const [activeLayer, setActiveLayer] = useState('layer-0');
     const [archStatus, setArchStatus] = useState<ArchitectureStatus>('stable');
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
     const [lastAnalyzed, setLastAnalyzed] = useState('Just now');
 
+    // AI Sidebar State
+    const [isAISidebarOpen, setIsAISidebarOpen] = useState(false);
+    const [isAILoading, setIsAILoading] = useState(false);
+
+    // Team Invite Modal State
+    const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+
+    // Collaboration
+    const { isAddingComment, toggleAddingComment } = useCollaboration();
+
+    // Handle AI button click
+    const handleAIButtonClick = () => {
+        setIsAILoading(true);
+        // Simulate loading
+        setTimeout(() => {
+            setIsAILoading(false);
+            setIsAISidebarOpen(true);
+        }, 500);
+    };
+
     // Quick helper to render content based on active layer
     const renderContent = () => {
-        // This logic mimics the old VisualizationLayout but we will improve the container
         if (activeLayer === 'layer-0') {
             return (
-                <div style={{ padding: '40px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <MermaidDiagram definition={MOCK_LAYER_0} />
-                </div>
+                <ImageContainer enableZoom enablePan>
+                    <div style={{ padding: '40px', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <MermaidDiagram definition={MOCK_LAYER_0} />
+                    </div>
+                </ImageContainer>
             )
         }
-        // Add other layers as needed
+
         if (activeLayer === 'layer-1') {
-            // Mock ReactFlow Data
             const mockData = {
                 nodes: [
                     { id: "gateway", type: "default", data: { label: "API Gateway" }, position: { x: 250, y: 50 }, style: { background: '#18181b', color: '#fff', border: '1px solid #333' } },
@@ -106,112 +143,166 @@ export default function DashboardLayout({ projectId }: { projectId: string }) {
     };
 
     return (
-        <IssueProvider>
-            <div className="dashboard-container">
-                {/* Left Sidebar - Navigation */}
-                <aside className="sidebar-nav">
-                    {/* Logo Header */}
-                    <div className="sidebar-header">
-                        <div className="brand-wrapper">
-                            <div className="brand-icon">
-                                <Globe className="w-5 h-5 text-white" />
-                            </div>
-                            <span className="brand-text">Eonix</span>
+        <div className="dashboard-container">
+            {/* Left Sidebar - Navigation */}
+            <aside className="sidebar-nav">
+                {/* Logo Header */}
+                <div className="sidebar-header">
+                    <div className="brand-wrapper">
+                        <div className="brand-icon">
+                            <Globe className="w-5 h-5 text-white" />
                         </div>
+                        <span className="brand-text">Eonix</span>
                     </div>
-
-                    {/* Navigation Items */}
-                    <div className="nav-section custom-scrollbar">
-                        <div className="nav-label">Platform</div>
-                        <nav>
-                            {LAYERS.map((layer) => (
-                                <button
-                                    key={layer.id}
-                                    onClick={() => setActiveLayer(layer.id)}
-                                    className={`nav-item ${activeLayer === layer.id ? 'active' : ''}`}
-                                >
-                                    <layer.icon className="nav-icon w-[18px] h-[18px]" />
-                                    <span>{layer.label}</span>
-                                </button>
-                            ))}
-                        </nav>
-                    </div>
-
-                    {/* User Profile Footer */}
-                    <div className="sidebar-footer">
-                        <div className="user-profile">
-                            <div className="w-9 h-9 rounded-lg bg-zinc-800 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-300">NK</div>
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                                <div className="text-sm font-medium text-zinc-200 truncate">Nahom Keneni</div>
-                                <div className="text-[11px] text-zinc-500 truncate">nahom@eonix.io</div>
-                            </div>
-                        </div>
-                    </div>
-                </aside>
-
-                {/* Main Content Area */}
-                <div className="main-wrapper">
-                    {/* Top Header Bar */}
-                    <header className="top-header glass-heavy">
-                        <div className="breadcrumb">
-                            <span className="hover:text-white cursor-pointer transition-colors">Projects</span>
-                            <span className="breadcrumb-separator">/</span>
-                            <span className="hover:text-white cursor-pointer transition-colors">Eonix</span>
-                            <span className="breadcrumb-separator">/</span>
-                            <span className="breadcrumb-active">{LAYERS.find(l => l.id === activeLayer)?.label}</span>
-                        </div>
-                        <div className="flex items-center gap-5">
-                            <button
-                                onClick={() => setIsHistoryOpen(true)}
-                                className={`status-indicator ${archStatus}`}
-                            >
-                                <div className="status-dot"></div>
-                                <span>
-                                    {archStatus === 'stable' ? 'System Healthy' :
-                                        archStatus === 'drift' ? 'Drift Detected' :
-                                            archStatus === 'breaking' ? 'Breaking Changes' : 'Analyzing...'}
-                                </span>
-                            </button>
-                        </div>
-                    </header>
-
-                    {/* Canvas Area */}
-                    <main className="canvas-area">
-                        {/* Dot Grid Background */}
-                        <div className="grid-background"></div>
-
-                        {/* Content Container */}
-                        <div className="content-container">
-                            {/* StatusBar Overlay */}
-                            <div className="status-overlay">
-                                <ArchitectureStatusBar
-                                    status={archStatus}
-                                    lastAnalyzed={lastAnalyzed}
-                                    onViewHistory={() => setIsHistoryOpen(true)}
-                                    onTriggerAnalysis={() => {
-                                        setArchStatus('pending');
-                                        setTimeout(() => {
-                                            setArchStatus('stable');
-                                            setLastAnalyzed('Just now');
-                                        }, 2000);
-                                    }}
-                                />
-                            </div>
-
-                            <div className="visualization-wrapper">
-                                {renderContent()}
-                            </div>
-                        </div>
-
-                        <ChangeHistory isOpen={isHistoryOpen} onClose={() => setIsHistoryOpen(false)} />
-                    </main>
                 </div>
 
-                {/* Right Sidebar - Issues Panel */}
-                <aside className="right-panel">
-                    <IssueSidebar />
-                </aside>
+                {/* Navigation Items */}
+                <div className="nav-section custom-scrollbar">
+                    <div className="nav-label">Platform</div>
+                    <nav>
+                        {LAYERS.map((layer) => (
+                            <button
+                                key={layer.id}
+                                onClick={() => setActiveLayer(layer.id)}
+                                className={`nav-item ${activeLayer === layer.id ? 'active' : ''}`}
+                            >
+                                <layer.icon className="nav-icon w-[18px] h-[18px]" />
+                                <span>{layer.label}</span>
+                            </button>
+                        ))}
+                    </nav>
+                </div>
+
+                {/* User Profile Footer */}
+                <div className="sidebar-footer">
+                    <div className="user-profile">
+                        <div className="w-9 h-9 rounded-lg bg-zinc-800 border border-white/10 flex items-center justify-center text-xs font-bold text-zinc-300">NK</div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                            <div className="text-sm font-medium text-zinc-200 truncate">Nahom Keneni</div>
+                            <div className="text-[11px] text-zinc-500 truncate">nahom@eonix.io</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            {/* Main Content Area */}
+            <div className="main-wrapper">
+                {/* Top Header Bar */}
+                <header className="top-header glass-heavy">
+                    <div className="breadcrumb">
+                        <span className="hover:text-white cursor-pointer transition-colors">Projects</span>
+                        <span className="breadcrumb-separator">/</span>
+                        <span className="hover:text-white cursor-pointer transition-colors">Eonix</span>
+                        <span className="breadcrumb-separator">/</span>
+                        <span className="breadcrumb-active">{LAYERS.find(l => l.id === activeLayer)?.label}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        {/* Collaboration Actions */}
+                        <button
+                            className={`header-action-btn ${isAddingComment ? 'active' : ''}`}
+                            onClick={toggleAddingComment}
+                            title="Add Comment"
+                        >
+                            <FiMessageSquare />
+                        </button>
+                        <button
+                            className="header-action-btn"
+                            onClick={() => setIsInviteModalOpen(true)}
+                            title="Invite Team"
+                        >
+                            <FiUserPlus />
+                        </button>
+
+                        {/* AI Button */}
+                        <ExplainWithAIButton
+                            onClick={handleAIButtonClick}
+                            isLoading={isAILoading}
+                        />
+
+                        {/* Status Indicator */}
+                        <button
+                            onClick={() => setIsHistoryOpen(true)}
+                            className={`status-indicator ${archStatus}`}
+                        >
+                            <div className="status-dot"></div>
+                            <span>
+                                {archStatus === 'stable' ? 'System Healthy' :
+                                    archStatus === 'drift' ? 'Drift Detected' :
+                                        archStatus === 'breaking' ? 'Breaking Changes' : 'Analyzing...'}
+                            </span>
+                        </button>
+                    </div>
+                </header>
+
+                {/* Canvas Area */}
+                <main className="canvas-area">
+                    {/* Premium Dot Grid Background */}
+                    <DotGridBackground
+                        dotSize={1}
+                        spacing={20}
+                        opacity={0.25}
+                        color="rgba(255, 255, 255, 0.5)"
+                    />
+
+                    {/* Content Container */}
+                    <div className="content-container">
+                        {/* StatusBar Overlay */}
+                        <div className="status-overlay">
+                            <ArchitectureStatusBar
+                                status={archStatus}
+                                lastAnalyzed={lastAnalyzed}
+                                onViewHistory={() => setIsHistoryOpen(true)}
+                                onTriggerAnalysis={() => {
+                                    setArchStatus('pending');
+                                    setTimeout(() => {
+                                        setArchStatus('stable');
+                                        setLastAnalyzed('Just now');
+                                    }, 2000);
+                                }}
+                            />
+                        </div>
+
+                        <div className="visualization-wrapper">
+                            {renderContent()}
+                        </div>
+                    </div>
+
+                    {/* Commenting System */}
+                    <CommentingSystem />
+
+                    <ChangeHistory isOpen={isHistoryOpen} onClose={() => setIsHistoryOpen(false)} />
+                </main>
             </div>
+
+            {/* Right Sidebar - Issues Panel */}
+            <aside className="right-panel">
+                <IssueSidebar />
+            </aside>
+
+            {/* Modals and Overlays */}
+            <TeamInviteModal
+                isOpen={isInviteModalOpen}
+                onClose={() => setIsInviteModalOpen(false)}
+            />
+
+            <AIChatSidebar
+                isOpen={isAISidebarOpen}
+                onClose={() => setIsAISidebarOpen(false)}
+                contextData={{
+                    activeLayer,
+                }}
+            />
+        </div>
+    );
+}
+
+// Main export wrapping with providers
+export default function DashboardLayout({ projectId }: { projectId: string }) {
+    return (
+        <IssueProvider>
+            <CollaborationProvider>
+                <DashboardContent projectId={projectId} />
+            </CollaborationProvider>
         </IssueProvider>
     );
 }

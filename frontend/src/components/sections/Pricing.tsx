@@ -124,7 +124,7 @@ export default function Pricing() {
                                 position: 'relative',
                                 padding: plan.highlight ? '2px' : '0',
                                 background: plan.highlight
-                                    ? 'linear-gradient(135deg, #6366f1, #ec4899, #f59e0b)'
+                                    ? '#6366f1'
                                     : 'transparent',
                                 borderRadius: '20px'
                             }}
