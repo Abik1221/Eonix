@@ -12,7 +12,7 @@ import {
     Zap,
     Shield
 } from '../icons/Icons';
-import { FiMessageSquare, FiUserPlus } from 'react-icons/fi';
+import { FiMessageSquare, FiUserPlus, FiMaximize2, FiMinimize2 } from 'react-icons/fi';
 // Importing visualizations
 import MermaidDiagram from '../visualizations/MermaidDiagram';
 import ServiceMap from '../visualizations/ServiceMap';
@@ -58,6 +58,7 @@ function DashboardContent({ projectId }: { projectId: string }) {
     const [archStatus, setArchStatus] = useState<ArchitectureStatus>('stable');
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
     const [lastAnalyzed, setLastAnalyzed] = useState('Just now');
+    const [isFocusMode, setIsFocusMode] = useState(false);
 
     // AI Sidebar State
     const [isAISidebarOpen, setIsAISidebarOpen] = useState(false);
@@ -143,7 +144,7 @@ function DashboardContent({ projectId }: { projectId: string }) {
     };
 
     return (
-        <div className="dashboard-container">
+        <div className={`dashboard-container ${isFocusMode ? 'focus-mode' : ''}`}>
             {/* Left Sidebar - Navigation */}
             <aside className="sidebar-nav">
                 {/* Logo Header */}
@@ -245,6 +246,14 @@ function DashboardContent({ projectId }: { projectId: string }) {
                     />
 
                     {/* Content Container */}
+                    <button
+                        className={`focus-toggle-btn ${isFocusMode ? 'active' : ''}`}
+                        onClick={() => setIsFocusMode(!isFocusMode)}
+                        title={isFocusMode ? "Exit Focus Mode" : "Enter Focus Mode"}
+                    >
+                        {isFocusMode ? <FiMinimize2 /> : <FiMaximize2 />}
+                    </button>
+
                     <div className="content-container">
                         {/* StatusBar Overlay */}
                         <div className="status-overlay">
