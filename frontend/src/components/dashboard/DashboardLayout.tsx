@@ -17,6 +17,11 @@ import { FiMessageSquare, FiUserPlus, FiMaximize2, FiMinimize2 } from 'react-ico
 import MermaidDiagram from '../visualizations/MermaidDiagram';
 import ServiceMap from '../visualizations/ServiceMap';
 import EndpointMatrix from '../visualizations/EndpointMatrix';
+import DataArchitecture from '../visualizations/DataArchitecture';
+import InternalStructure from '../visualizations/InternalStructure';
+import Infrastructure from '../visualizations/Infrastructure';
+import AsyncEvents from '../visualizations/AsyncEvents';
+import SecurityFlow from '../visualizations/SecurityFlow';
 import { ReactFlowProvider } from 'reactflow';
 import IssueSidebar from '../issues/IssueSidebar';
 import { IssueProvider } from '@/context/IssueContext';
@@ -127,6 +132,46 @@ function DashboardContent({ projectId }: { projectId: string }) {
                 <div style={{ padding: '24px' }}>
                     <EndpointMatrix endpoints={mockEndpoints} />
                 </div>
+            );
+        }
+
+        if (activeLayer === 'layer-3') {
+            return (
+                <ReactFlowProvider>
+                    <DataArchitecture />
+                </ReactFlowProvider>
+            );
+        }
+
+        if (activeLayer === 'layer-4') {
+            return (
+                <ReactFlowProvider>
+                    <InternalStructure />
+                </ReactFlowProvider>
+            );
+        }
+
+        if (activeLayer === 'layer-5') {
+            return (
+                <ReactFlowProvider>
+                    <Infrastructure />
+                </ReactFlowProvider>
+            );
+        }
+
+        if (activeLayer === 'layer-6') {
+            return (
+                <ReactFlowProvider>
+                    <AsyncEvents />
+                </ReactFlowProvider>
+            );
+        }
+
+        if (activeLayer === 'layer-7') {
+            return (
+                <ReactFlowProvider>
+                    <SecurityFlow />
+                </ReactFlowProvider>
             );
         }
 
